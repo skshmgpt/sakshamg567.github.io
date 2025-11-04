@@ -1,9 +1,9 @@
 {
   "Projects": {
     "manimorph": {
-      "description": "Cursor For 2d animation (currently offline, check github)",
+      "description": "Cursor For 2d animation (wip)",
       "stack": "Next.js, Typescript, Docker, AI SDK, FastAPI",
-      "github": "https://github.com/sakshamg567/manimorph-next"
+      "link": "https://manimorph.vercel.app"
     },
     "ftp-server": {
       "description": "File Transfer Protocol Server written in C",
