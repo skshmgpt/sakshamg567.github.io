@@ -97,7 +97,7 @@ const App = () => {
             <Social
               Icon={GitHub}
               Text={"Github"}
-              Link={"https://github.com/sakshamg567"}
+              Link={"https://github.com/skshmgpt"}
             />
             <Social
               Icon={X}
@@ -107,7 +107,7 @@ const App = () => {
             <Social
               Icon={LinkedIn}
               Text={"Linkedin"}
-              Link={"https://linkedin.com/in/sakshamg123"}
+              Link={"https://linkedin.com/in/skshmgpt"}
             />
             <Social
               Icon={Medium}
