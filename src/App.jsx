@@ -39,7 +39,7 @@ const App = () => {
               </a>
             </Badge>
             <Badge asChild className="border border-zinc-800 p-2">
-              <a href="https://github.com/sakshamg567">
+              <a href="https://github.com/skshmgpt">
                 <GitHub />
               </a>
             </Badge>
