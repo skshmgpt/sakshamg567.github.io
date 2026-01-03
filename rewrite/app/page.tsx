@@ -20,7 +20,11 @@ import { useRouter } from "next/navigation";
 import BlogDisplay from "@/components/BlogsDisplay";
 const App = () => {
   useEffect(() => {
-    const lenis = new Lenis();
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
 
     function raf(time: number) {
       lenis.raf(time);
@@ -33,7 +37,6 @@ const App = () => {
       lenis.destroy();
     };
   }, []);
-
   const router = useRouter();
 
   return (
