@@ -29,7 +29,7 @@ const App = () => {
       />
 
       <main
-        className={`flex min-h-screen flex-col text-white px-8 md:px-16 lg:px-24 my-8 max-w-5xl mx-auto z-100 relative font-mono`}
+        className={`flex min-h-screen flex-col text-white px-8 md:px-16 lg:px-24 my-8 max-w-5xl mx-auto z-100 relative font-berkeley-mono`}
       >
         <div className="mt-10 md:mt-0 mb-10 flex sm:flex-row items-center gap-5 rounded-md justify-between">
           <div className="flex flex-row gap-5 items-center">

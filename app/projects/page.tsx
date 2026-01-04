@@ -13,7 +13,7 @@ const Projects = () => {
         patternAlpha={7}
       />
       <main
-        className={`flex min-h-screen flex-col text-white p-8 md:p-16 lg:p-24 max-w-5xl mx-auto z-100 relative font-mono`}
+        className={`flex min-h-screen flex-col text-white p-8 md:p-16 lg:p-24 max-w-5xl mx-auto z-100 relative font-berkeley-mono`}
       >
         <h1 className="text-3xl font-bold mb-8">projects</h1>
         {Object.entries(data["Projects"]).map(([Title, details]) => (

@@ -21,17 +21,6 @@ export const metadata: Metadata = {
     url: "https://www.skshmgpt.tech",
     title: "Saksham Gupta",
     description: "Saksham's Portfolio",
-    images: [
-      {
-        url: "https://skshmgpt.tech/opengraph-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Saksham Gupta Portfolio",
-      },
-    ],
-  },
-  icons: {
-    icon: "/favicon.ico",
   },
 };
 

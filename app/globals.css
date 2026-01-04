@@ -20,7 +20,7 @@
 }
 
 @theme {
-    --font-mono: "Berkeley-Mono";
+    --font-berkeley-mono: "Berkeley-Mono";
     --font-inter: "Inter";
 }
 
@@ -40,20 +40,23 @@
 }
 
 .markdown-body h1 {
-    font-size: 20 !important;
+    font-size: 15 !important;
 }
 
 .markdown-body code {
     color: white !important;
     word-break: break-word;
+    font-family: "Inter";
+    background-color: transparent;
 }
 
 .markdown-body pre {
-    background: #333333 !important;
+    background: #111111 !important;
     padding: 0.5rem;
     margin: 0.5rem;
     max-width: 100%;
     overflow-x: auto;
+    font-family: "Inter";
 }
 
 .markdown-body a {
@@ -82,7 +85,7 @@
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --font-sans: var(--font-geist-sans);
-    /*--font-mono: var(--font-geist-mono);*/
+    --font-mono: var(--font-geist-mono);
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
