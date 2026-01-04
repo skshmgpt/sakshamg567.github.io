@@ -11,8 +11,17 @@
     src: url("/fonts/BerkeleyMono.woff2") format("woff2");
 }
 
+@font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("/fonts/Inter.woff2") format("woff2");
+}
+
 @theme {
     --font-mono: "Berkeley-Mono";
+    --font-inter: "Inter";
 }
 
 /* Modern markdown preview styles */
@@ -27,7 +36,7 @@
 .markdown-body h5,
 .markdown-body h6 {
     color: white !important;
-    line-height: 5;
+    line-height: 1;
 }
 
 .markdown-body h1 {

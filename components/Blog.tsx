@@ -6,6 +6,7 @@ import rehypeRaw from "rehype-raw";
 import fs from "fs/promises";
 import path from "path";
 import "highlight.js/styles/github-dark.css";
+import Image from "next/image";
 
 export default async function Blog({ slug }) {
   const content = await fs.readFile(
@@ -15,7 +16,7 @@ export default async function Blog({ slug }) {
 
   return (
     <div className="flex flex-col text-white p-8 md:p-16 lg:p-24 max-w-5xl mx-auto relative">
-      <div className="markdown-body prose prose-invert max-w-none">
+      <div className="markdown-body prose prose-invert max-w-none font-inter">
         <Markdown
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw, rehypeHighlight]}
@@ -70,6 +71,16 @@ export default async function Blog({ slug }) {
             ),
             ol: ({ node, ...props }) => (
               <ol className="list-decimal ml-6 mb-4 text-gray-300" {...props} />
+            ),
+            img: ({ src, alt }) => (
+              <div className="relative w-full my-6 aspect-video">
+                <Image
+                  src={src as string}
+                  alt={alt ?? ""}
+                  fill
+                  className="object-contain rounded-lg"
+                />
+              </div>
             ),
           }}
         >
