@@ -32,6 +32,11 @@
     }
   },
   "blogs": {
+    "Git is a Database": {
+      "description": "",
+      "date": "Jan 5, 2026",
+      "slug": "git-internals"
+    },
     "Journey of a request — Beyond the Protocols": {
       "description": "Have you ever thought about what goes behind the scenes when you make a request on the internet?",
       "date": "Oct 5, 2025",
