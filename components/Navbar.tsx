@@ -24,7 +24,7 @@ export default function Navbar() {
   return (
     <div className="flex flex-row mt-15 px-8 md:px-16 lg:px-24 max-w-5xl mx-auto z-100 relative font-mono text-white gap-10 *:hover:text-yellow-500">
       <button onClick={() => router.push("/")}>[h] home</button>
-      <button onClick={() => router.push("/blogs")}>[b] blogs</button>
+      <button onClick={() => router.push("/blog")}>[b] blogs</button>
       <button onClick={() => router.push("/projects")}>[p] projects</button>
     </div>
   );
