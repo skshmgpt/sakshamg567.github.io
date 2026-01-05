@@ -1,5 +1,4 @@
-Journey of a request — Beyond the Protocols
-===========================================
+## Journey of a request — Beyond the Protocols
 ![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*wD3Bqg85fgg6IomjVtnRrA.png)
 
 > Requests — we deal with them every day. Every click on the internet is a request, even this blog you opened, started with a request.

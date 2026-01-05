@@ -1,5 +1,4 @@
-The Math Behind LinkedIn’s Real-Time Social Network
-===================================================
+## The Math Behind LinkedIn’s Real-Time Social Network
 
 
 ![captionless image](https://miro.medium.com/v2/resize:fit:1184/format:webp/0*53XTS7l3hU1wDl_6)
