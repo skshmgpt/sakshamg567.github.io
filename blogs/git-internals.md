@@ -1,4 +1,4 @@
-# Git is a Database
+## Git is a Database
 
 ![banner](/git-blog-banner.webp)
 

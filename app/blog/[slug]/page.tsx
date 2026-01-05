@@ -19,6 +19,17 @@ export async function generateMetadata({
   return {
     title: `${title} | Saksham Gupta`,
     description: blogEntry ? blogEntry[1].description : `Blog post: ${title}`,
+    openGraph: {
+      title: `${title}`,
+      description: blogEntry ? blogEntry[1].description : `Blog post: ${title}`,
+      images: [
+        {
+          url: `/${slug}.webp`,
+          width: 1200,
+          height: 630,
+        },
+      ],
+    },
   };
 }
 

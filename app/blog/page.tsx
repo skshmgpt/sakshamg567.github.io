@@ -17,7 +17,6 @@ const Blogs = () => {
       >
         <h1 className="text-3xl font-bold mb-8">blogs</h1>
         {Object.entries(data["blogs"])
-          .reverse()
           .map(([title, details]) => (
             <>
               <div className="mb-3">
