@@ -1,93 +1,79 @@
-import { BlogMetric, BlogMetricsSummary, MetricsData } from "@/types/metrics";
-import { readFile, writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { BlogMetric, BlogMetricsSummary } from "@/types/metrics";
+import { kv } from "@vercel/kv";
 
-const METRICS_DIR = path.join(process.cwd(), "data");
-const METRICS_FILE = path.join(METRICS_DIR, "metrics.json");
-
-// Ensure the data directory exists
-async function ensureDataDir() {
-  try {
-    await mkdir(METRICS_DIR, { recursive: true });
-  } catch (error) {
-    // Directory might already exist
-  }
-}
-
-// Read metrics from file
-export async function readMetrics(): Promise<MetricsData> {
-  try {
-    await ensureDataDir();
-    const data = await readFile(METRICS_FILE, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    // If file doesn't exist, return empty structure
-    return { metrics: [], summaries: {} };
-  }
-}
-
-// Write metrics to file
-export async function writeMetrics(data: MetricsData): Promise<void> {
-  await ensureDataDir();
-  await writeFile(METRICS_FILE, JSON.stringify(data, null, 2), "utf-8");
-}
+const METRICS_KEY = "blog:metrics";
+const SUMMARIES_KEY = "blog:summaries";
 
 // Add a new metric and update summaries
 export async function addMetric(metric: BlogMetric): Promise<void> {
-  const data = await readMetrics();
+  // Store the individual metric in a list
+  await kv.lpush(`${METRICS_KEY}:${metric.slug}`, JSON.stringify(metric));
   
-  // Add the metric
-  data.metrics.push(metric);
+  // Get all metrics for this slug to recalculate summary
+  const slugMetrics = await kv.lrange<string>(
+    `${METRICS_KEY}:${metric.slug}`,
+    0,
+    -1
+  );
   
-  // Update summary for this slug
-  const slugMetrics = data.metrics.filter((m) => m.slug === metric.slug);
-  const uniqueSessions = new Set(slugMetrics.map((m) => m.sessionId));
+  const parsedMetrics: BlogMetric[] = slugMetrics.map((m) => JSON.parse(m));
+  const uniqueSessions = new Set(parsedMetrics.map((m) => m.sessionId));
   
   // Calculate averages
-  const totalReadingTime = slugMetrics.reduce(
+  const totalReadingTime = parsedMetrics.reduce(
     (sum, m) => sum + (m.readingTimeSpent || 0),
     0
   );
-  const totalScrollDepth = slugMetrics.reduce(
+  const totalScrollDepth = parsedMetrics.reduce(
     (sum, m) => sum + (m.scrollDepth || 0),
     0
   );
   
   // Count referrers
   const referrerCounts: { [key: string]: number } = {};
-  slugMetrics.forEach((m) => {
+  parsedMetrics.forEach((m) => {
     const ref = m.referrer || "direct";
     referrerCounts[ref] = (referrerCounts[ref] || 0) + 1;
   });
   
   // Update summary
-  data.summaries[metric.slug] = {
+  const summary: BlogMetricsSummary = {
     slug: metric.slug,
-    pageViews: slugMetrics.length,
+    pageViews: parsedMetrics.length,
     uniqueVisitors: uniqueSessions.size,
-    averageReadingTime: Math.round(totalReadingTime / slugMetrics.length),
-    averageScrollDepth: Math.round(totalScrollDepth / slugMetrics.length),
+    averageReadingTime: Math.round(totalReadingTime / parsedMetrics.length),
+    averageScrollDepth: Math.round(totalScrollDepth / parsedMetrics.length),
     topReferrers: referrerCounts,
     lastUpdated: Date.now(),
   };
   
-  await writeMetrics(data);
+  await kv.hset(SUMMARIES_KEY, { [metric.slug]: JSON.stringify(summary) });
 }
 
 // Get summary for a specific slug
 export async function getMetricsSummary(
   slug: string
 ): Promise<BlogMetricsSummary | null> {
-  const data = await readMetrics();
-  return data.summaries[slug] || null;
+  const summary = await kv.hget<string>(SUMMARIES_KEY, slug);
+  return summary ? JSON.parse(summary) : null;
 }
 
 // Get all summaries
 export async function getAllSummaries(): Promise<{
   [slug: string]: BlogMetricsSummary;
 }> {
-  const data = await readMetrics();
-  return data.summaries;
+  const summaries = await kv.hgetall<{ [key: string]: string }>(SUMMARIES_KEY);
+  
+  if (!summaries) {
+    return {};
+  }
+  
+  const parsed: { [slug: string]: BlogMetricsSummary } = {};
+  for (const [slug, data] of Object.entries(summaries)) {
+    parsed[slug] = JSON.parse(data);
+  }
+  
+  return parsed;
 }
 
 // Export metrics as CSV

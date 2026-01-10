@@ -16,8 +16,3 @@ export interface BlogMetricsSummary {
   topReferrers: { [referrer: string]: number };
   lastUpdated: number;
 }
-
-export interface MetricsData {
-  metrics: BlogMetric[];
-  summaries: { [slug: string]: BlogMetricsSummary };
-}

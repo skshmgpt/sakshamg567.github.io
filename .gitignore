@@ -40,5 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# blog metrics data
-/data/metrics.json
+# legacy data directory (now using Vercel KV)
+/data
