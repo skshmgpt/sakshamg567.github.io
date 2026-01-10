@@ -5,9 +5,9 @@ export default function BlogDisplay({
   details,
 }: {
   title: string;
-  details: { description: string; date: string; slug: string };
+  details: { description: string; date: string; slug: string; readTime?: string };
 }) {
-  const { description, date, slug } = details;
+  const { description, date, slug, readTime } = details;
   const router = useRouter();
   return (
     <div
@@ -16,7 +16,10 @@ export default function BlogDisplay({
     >
       <div className="flex justify-between items-start mb-0.5">
         <h3 className="font-bold text-lg">{title}</h3>
-        <p className="text-gray-400">{date}</p>
+        <div className="flex gap-3 text-gray-400">
+          {readTime && <span>{readTime}</span>}
+          <p>{date}</p>
+        </div>
       </div>
     </div>
   );

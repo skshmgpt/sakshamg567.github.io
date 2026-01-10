@@ -7,6 +7,7 @@ import fs from "fs/promises";
 import path from "path";
 import "highlight.js/styles/github-dark.css";
 import Image from "next/image";
+import { calculateReadTime } from "@/lib/utils";
 
 export default async function Blog({ slug }: { slug: string }) {
   const content = await fs.readFile(
@@ -14,8 +15,13 @@ export default async function Blog({ slug }: { slug: string }) {
     "utf-8",
   );
 
+  const readTime = calculateReadTime(content);
+
   return (
     <div className="flex flex-col text-white p-6 md:p-12 lg:p-16 max-w-4xl mx-auto relative">
+      <div className="mb-4 text-gray-400 text-sm">
+        {readTime}
+      </div>
       <div className="markdown-body prose prose-invert max-w-none font-inter">
         <Markdown
           remarkPlugins={[remarkGfm]}
