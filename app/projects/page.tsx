@@ -1,7 +1,8 @@
-import Noise from "@/components/Noise";
+import NoiseWrapper from "@/components/NoiseWrapper";
 import ProjectDisplay from "@/components/ProjectDisplay";
 import { readFile } from "fs/promises";
 import path from "path";
+import type { Metadata } from "next";
 
 type ProjectData = {
   Projects: {
@@ -13,6 +14,11 @@ type ProjectData = {
   };
 };
 
+export const metadata: Metadata = {
+  title: "Projects - Saksham Gupta",
+  description: "Explore my projects including web applications, system programming, and open-source contributions.",
+};
+
 export default async function Projects() {
   const dataFile = await readFile(
     path.join(process.cwd(), "public/data.json"),
@@ -22,7 +28,7 @@ export default async function Projects() {
 
   return (
     <div>
-      <Noise
+      <NoiseWrapper
         patternSize={250}
         patternScaleX={1}
         patternScaleY={1}
