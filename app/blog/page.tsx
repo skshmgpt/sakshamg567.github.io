@@ -1,5 +1,7 @@
 import BlogDisplay from "@/components/BlogsDisplay";
 import Noise from "@/components/Noise";
+
+const Blogs = () => {
 import { readFile } from "fs/promises";
 import path from "path";
 
