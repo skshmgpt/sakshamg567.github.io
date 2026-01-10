@@ -1,5 +1,3 @@
-"use client";
-import data from "../public/data.json";
 import {
   ArrowOutwardRounded,
   Email,
@@ -12,11 +10,35 @@ import ProjectDisplay from "@components/ProjectDisplay";
 import Social from "@components/Social";
 import Medium from "@components/Medium";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import BlogDisplay from "@/components/BlogsDisplay";
 import Noise from "@/components/Noise";
-const App = () => {
-  const router = useRouter();
+import { readFile } from "fs/promises";
+import path from "path";
+
+type Data = {
+  Projects: {
+    [key: string]: {
+      description: string;
+      stack: string;
+      link: string;
+    };
+  };
+  blogs: {
+    [key: string]: {
+      description: string;
+      date: string;
+      slug: string;
+    };
+  };
+};
+
+export default async function App() {
+  const dataFile = await readFile(
+    path.join(process.cwd(), "public/data.json"),
+    "utf-8"
+  );
+  const data = JSON.parse(dataFile) as Data;
 
   return (
     <div>
@@ -92,24 +114,22 @@ const App = () => {
             <h1 className="font-bold text-xl sm:text-2xl text-white mb-4">
               Blogs
             </h1>
-            {Object.entries(data["blogs"])
+            {Object.entries(data.blogs)
               .slice(2)
               .map(([title, details]) => (
-                <>
-                  <div className="mb-5">
-                    <BlogDisplay key={title} title={title} details={details} />
-                  </div>
-                </>
+                <div key={title} className="mb-5">
+                  <BlogDisplay title={title} details={details} />
+                </div>
               ))}
           </div>
           <div className="group p-0.5 cursor-pointer">
-            <button
+            <Link
+              href="/blog"
               className="text-yellow-500 hover:underline items-center cursor-pointer"
-              onClick={() => router.push("/blog")}
             >
               all blogs
               <ArrowOutwardRounded className="scale-80 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 ease-in-out -translate-y-[0.075rem] cursor-pointer p-0 m-0" />
-            </button>
+            </Link>
           </div>
         </section>
 
@@ -118,20 +138,20 @@ const App = () => {
             <h1 className="font-bold text-xl sm:text-2xl text-white mb-7">
               projects
             </h1>
-            {Object.entries(data["Projects"])
+            {Object.entries(data.Projects)
               .slice(0, 2)
               .map(([Title, details]) => (
                 <ProjectDisplay key={Title} title={Title} details={details} />
               ))}
           </div>
           <div className="group p-0.5 cursor-pointer">
-            <button
+            <Link
+              href="/projects"
               className="text-yellow-500 hover:underline items-center cursor-pointer"
-              onClick={() => router.push("/projects")}
             >
               all projects
               <ArrowOutwardRounded className="scale-80 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 ease-in-out -translate-y-[0.075rem] cursor-pointer p-0 m-0" />
-            </button>
+            </Link>
           </div>
         </section>
 
@@ -164,6 +184,4 @@ const App = () => {
       </main>
     </div>
   );
-};
-
-export default App;
+}
