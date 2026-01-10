@@ -33,6 +33,12 @@ export async function generateMetadata({
   };
 }
 
+export async function generateStaticParams() {
+  return Object.entries(data.blogs).map(([_, blog]) => ({
+    slug: blog.slug,
+  }));
+}
+
 export default async function BlogPage({
   params,
 }: {
