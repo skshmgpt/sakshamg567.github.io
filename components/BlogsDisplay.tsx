@@ -11,15 +11,18 @@ export default function BlogDisplay({
   const router = useRouter();
   return (
     <div
-      className="text-white *:hover:cursor-pointer *:hover:underline"
+      className="text-white hover:cursor-pointer group"
       onClick={() => router.push(`/blog/${slug}`)}
     >
-      <div className="flex justify-between items-start mb-0.5">
-        <h3 className="font-bold text-lg">{title}</h3>
-        <div className="flex gap-3 text-gray-400">
-          {readTime && <span>{readTime}</span>}
-          <p>{date}</p>
-        </div>
+      <h3 className="font-bold text-lg mb-1 group-hover:underline">{title}</h3>
+      <div className="flex flex-wrap gap-2 text-sm text-gray-400">
+        <span>{date}</span>
+        {readTime && (
+          <>
+            <span className="hidden sm:inline">•</span>
+            <span>{readTime}</span>
+          </>
+        )}
       </div>
     </div>
   );
