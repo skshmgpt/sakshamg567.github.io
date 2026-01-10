@@ -15,6 +15,7 @@ import BlogDisplay from "@/components/BlogsDisplay";
 import Noise from "@/components/Noise";
 import { readFile } from "fs/promises";
 import path from "path";
+import { calculateReadTime } from "@/lib/utils";
 
 type Data = {
   Projects: {
@@ -39,6 +40,18 @@ export default async function App() {
     "utf-8"
   );
   const data = JSON.parse(dataFile) as Data;
+
+  // Calculate read times for blogs
+  const blogsWithReadTime = await Promise.all(
+    Object.entries(data.blogs).map(async ([title, details]) => {
+      const content = await readFile(
+        path.join(process.cwd(), "blogs", `${details.slug}.md`),
+        "utf-8"
+      );
+      const readTime = calculateReadTime(content);
+      return { title, details: { ...details, readTime } };
+    })
+  );
 
   return (
     <div>
@@ -114,9 +127,9 @@ export default async function App() {
             <h1 className="font-bold text-xl sm:text-2xl text-white mb-4">
               Blogs
             </h1>
-            {Object.entries(data.blogs)
+            {blogsWithReadTime
               .slice(2)
-              .map(([title, details]) => (
+              .map(({ title, details }) => (
                 <div key={title} className="mb-5">
                   <BlogDisplay title={title} details={details} />
                 </div>
