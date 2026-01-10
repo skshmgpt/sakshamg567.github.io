@@ -1,7 +1,7 @@
 # Blog Metrics System
 
 ## Overview
-Automated blog metrics collection system that tracks page views, reading time, unique visitors, scroll depth, and referrer sources using Vercel KV for distributed, production-ready storage.
+Automated blog metrics collection system that tracks page views, reading time, unique visitors, scroll depth, and referrer sources using Redis for distributed, production-ready storage.
 
 ## Features
 
@@ -13,7 +13,7 @@ Automated blog metrics collection system that tracks page views, reading time, u
 - **Referrer Source**: Where visitors came from (direct, search engines, other sites)
 
 ### Data Storage
-- Metrics are stored in Vercel KV (Redis-compatible key-value store)
+- Metrics are stored in Redis (node-redis client)
 - Scalable and production-ready
 - Automatic data persistence
 - Fast read/write operations
@@ -25,47 +25,36 @@ Automated blog metrics collection system that tracks page views, reading time, u
 
 ## Setup
 
-### 1. Create Vercel KV Database
+### 1. Redis Instance
 
-1. Go to your [Vercel Dashboard](https://vercel.com/dashboard)
-2. Navigate to the **Storage** tab
-3. Click **Create Database** and select **KV**
-4. Name your database (e.g., "blog-metrics")
-5. Select a region close to your users
-6. Click **Create**
+You can use any Redis provider. This project is configured to use Redis Labs (via Vercel).
 
 ### 2. Configure Environment Variables
 
-Vercel will automatically provide these environment variables when you deploy:
-- `KV_REST_API_URL`
-- `KV_REST_API_TOKEN`
-- `KV_REST_API_READ_ONLY_TOKEN`
-- `KV_URL`
-
-For local development, create a `.env.local` file:
+Create a `.env.local` file (or add to your Vercel environment variables):
 
 ```bash
-# Copy these values from your Vercel KV dashboard
-KV_REST_API_URL="https://your-kv-url.upstash.io"
-KV_REST_API_TOKEN="your-token-here"
-KV_REST_API_READ_ONLY_TOKEN="your-readonly-token-here"
-KV_URL="redis://default:your-password@your-kv-url.upstash.io"
+REDIS_URL="redis://default:your-password@your-redis-host.com:port"
 ```
 
-### 3. Link to Vercel Project
-
-Connect your KV database to your Vercel project:
-
+**Example (Redis Labs):**
 ```bash
-# In the Vercel dashboard, go to your project
-# Settings > Environment Variables
-# Add the KV environment variables
+REDIS_URL="redis://default:dhg0gyS1NqgeI9mFPgzDNYk8VdYXelk4@redis-14969.c264.ap-south-1-1.ec2.cloud.redislabs.com:14969"
 ```
+
+### 3. Vercel Setup
+
+Add the `REDIS_URL` environment variable in your Vercel project:
+
+1. Go to your Vercel Dashboard
+2. Select your project
+3. Navigate to **Settings** > **Environment Variables**
+4. Add `REDIS_URL` with your Redis connection string
 
 Or use the Vercel CLI:
 
 ```bash
-vercel env pull .env.local
+vercel env add REDIS_URL
 ```
 
 ## Usage
@@ -99,7 +88,7 @@ journey-request,89,72,312,92,direct,2026-01-10T...
 
 ## Technical Details
 
-### Data Structure in Vercel KV
+### Data Structure in Redis
 
 **Individual metrics (per blog):**
 ```
@@ -115,6 +104,16 @@ Type: Hash
 Fields: {slug}: JSON BlogMetricsSummary object
 ```
 
+### Redis Client
+
+The project uses `node-redis` with a singleton pattern to maintain a single connection:
+
+```typescript
+import { getRedisClient } from "@/lib/redis";
+
+const redis = await getRedisClient();
+```
+
 ### Components
 - `MetricsTracker` - Client component that tracks user behavior
 - `BlogWrapper` - Wrapper component that integrates metrics tracking
@@ -125,7 +124,8 @@ Fields: {slug}: JSON BlogMetricsSummary object
 
 ### Files
 - `/types/metrics.ts` - TypeScript interfaces
-- `/lib/metrics.ts` - Core metrics functionality (Vercel KV integration)
+- `/lib/redis.ts` - Redis client singleton
+- `/lib/metrics.ts` - Core metrics functionality (Redis integration)
 - `/components/MetricsTracker.tsx` - Client-side tracking
 - `/components/BlogWrapper.tsx` - Integration wrapper
 - `/app/api/metrics/route.ts` - Store metrics endpoint
@@ -135,35 +135,42 @@ Fields: {slug}: JSON BlogMetricsSummary object
 - Session IDs are generated client-side and stored in sessionStorage
 - No personally identifiable information is collected
 - Referrer data only includes the source URL
-- Data is stored securely in Vercel KV with encryption at rest
+- Data is stored securely in Redis with TLS encryption
 
 ## Development vs Production
 
 ### Local Development
-- Requires `.env.local` with KV credentials
-- Can use a separate KV database for testing
-- Metrics won't persist if KV is not configured
+- Requires `.env.local` with `REDIS_URL`
+- Can use a separate Redis database for testing
+- Metrics won't persist if Redis is not configured
 
 ### Production (Vercel)
-- Environment variables automatically injected
-- Production KV database used
+- Environment variables injected via Vercel settings
+- Production Redis database used
 - Metrics persist across deployments
 - Automatic scaling with traffic
 
 ## Troubleshooting
 
 ### Metrics not being recorded
-1. Check that KV environment variables are set
-2. Verify KV database is active in Vercel dashboard
+1. Check that `REDIS_URL` environment variable is set
+2. Verify Redis instance is accessible
 3. Check browser console for API errors
 4. Ensure `/api/metrics` endpoint is accessible
+5. Check Redis connection: `redis-cli ping`
 
 ### Export shows no data
 - Metrics may not have been collected yet
 - Visit some blog posts to generate data
-- Check KV database in Vercel dashboard to verify data exists
+- Check Redis directly: `redis-cli hgetall blog:summaries`
 
 ### Local development issues
-- Ensure `.env.local` exists with valid KV credentials
-- Run `vercel env pull .env.local` to sync environment variables
+- Ensure `.env.local` exists with valid `REDIS_URL`
 - Restart the dev server after adding environment variables
+- Test Redis connection: `redis-cli -u $REDIS_URL ping`
+
+### Redis connection errors
+- Verify the `REDIS_URL` format is correct
+- Check Redis instance is running and accessible
+- Ensure firewall/security groups allow connections
+- For Redis Labs, check IP whitelist settings

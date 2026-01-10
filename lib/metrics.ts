@@ -1,22 +1,22 @@
 import { BlogMetric, BlogMetricsSummary } from "@/types/metrics";
-import { kv } from "@vercel/kv";
+import { getRedisClient } from "./redis";
 
 const METRICS_KEY = "blog:metrics";
 const SUMMARIES_KEY = "blog:summaries";
 
 // Add a new metric and update summaries
 export async function addMetric(metric: BlogMetric): Promise<void> {
+  const redis = await getRedisClient();
+  
   // Store the individual metric in a list
-  await kv.lpush(`${METRICS_KEY}:${metric.slug}`, JSON.stringify(metric));
+  await redis.lPush(`${METRICS_KEY}:${metric.slug}`, JSON.stringify(metric));
   
   // Get all metrics for this slug to recalculate summary
-  const slugMetrics = await kv.lrange<string>(
-    `${METRICS_KEY}:${metric.slug}`,
-    0,
-    -1
-  );
+  const slugMetrics = await redis.lRange(`${METRICS_KEY}:${metric.slug}`, 0, -1);
   
-  const parsedMetrics: BlogMetric[] = slugMetrics.map((m) => JSON.parse(m));
+  const parsedMetrics: BlogMetric[] = slugMetrics.map((m: string) =>
+    JSON.parse(m)
+  );
   const uniqueSessions = new Set(parsedMetrics.map((m) => m.sessionId));
   
   // Calculate averages
@@ -47,14 +47,15 @@ export async function addMetric(metric: BlogMetric): Promise<void> {
     lastUpdated: Date.now(),
   };
   
-  await kv.hset(SUMMARIES_KEY, { [metric.slug]: JSON.stringify(summary) });
+  await redis.hSet(SUMMARIES_KEY, metric.slug, JSON.stringify(summary));
 }
 
 // Get summary for a specific slug
 export async function getMetricsSummary(
   slug: string
 ): Promise<BlogMetricsSummary | null> {
-  const summary = await kv.hget<string>(SUMMARIES_KEY, slug);
+  const redis = await getRedisClient();
+  const summary = await redis.hGet(SUMMARIES_KEY, slug);
   return summary ? JSON.parse(summary) : null;
 }
 
@@ -62,15 +63,16 @@ export async function getMetricsSummary(
 export async function getAllSummaries(): Promise<{
   [slug: string]: BlogMetricsSummary;
 }> {
-  const summaries = await kv.hgetall<{ [key: string]: string }>(SUMMARIES_KEY);
+  const redis = await getRedisClient();
+  const summaries = await redis.hGetAll(SUMMARIES_KEY);
   
-  if (!summaries) {
+  if (!summaries || Object.keys(summaries).length === 0) {
     return {};
   }
   
   const parsed: { [slug: string]: BlogMetricsSummary } = {};
   for (const [slug, data] of Object.entries(summaries)) {
-    parsed[slug] = JSON.parse(data);
+    parsed[slug] = JSON.parse(data as string);
   }
   
   return parsed;
