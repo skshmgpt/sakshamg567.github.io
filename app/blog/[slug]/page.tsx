@@ -1,4 +1,5 @@
 import Blog from "@/components/Blog";
+import BlogWrapper from "@/components/BlogWrapper";
 import data from "@/public/data.json";
 import type { Metadata } from "next";
 
@@ -99,7 +100,9 @@ export default async function BlogPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Blog slug={slug} />
+      <BlogWrapper slug={slug}>
+        <Blog slug={slug} />
+      </BlogWrapper>
     </>
   );
 }
