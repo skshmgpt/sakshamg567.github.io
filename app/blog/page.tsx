@@ -2,6 +2,7 @@
 import BlogDisplay from "@/components/BlogsDisplay";
 import data from "../../public/data.json";
 import Noise from "@/components/Noise";
+
 const Blogs = () => {
   return (
     <div>

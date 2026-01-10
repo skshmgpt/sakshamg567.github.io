@@ -15,20 +15,34 @@ export async function generateMetadata({
   );
 
   const title = blogEntry ? blogEntry[0] : slug;
+  const description = blogEntry?.[1].description || `Blog post: ${title}`;
+  const date = blogEntry?.[1].date || "";
 
   return {
-    title: `${title} | Saksham Gupta`,
-    description: blogEntry ? blogEntry[1].description : `Blog post: ${title}`,
+    title: `${title}`,
+    description: description,
+    authors: [{ name: "Saksham Gupta" }],
     openGraph: {
       title: `${title}`,
-      description: blogEntry ? blogEntry[1].description : `Blog post: ${title}`,
+      description: description,
+      type: "article",
+      publishedTime: date,
+      authors: ["Saksham Gupta"],
       images: [
         {
           url: `/${slug}.webp`,
           width: 1200,
           height: 630,
+          alt: title,
         },
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title}`,
+      description: description,
+      creator: "@skshmgpt",
+      images: [`/${slug}.webp`],
     },
   };
 }
@@ -40,5 +54,46 @@ export default async function BlogPage({
 }) {
   const { slug } = await params;
 
-  return <Blog slug={slug} />;
+  // Find the blog entry for structured data
+  const blogEntry = Object.entries(data.blogs).find(
+    ([_, blog]) => blog.slug === slug,
+  );
+
+  const title = blogEntry ? blogEntry[0] : slug;
+  const description = blogEntry?.[1].description || "";
+  const date = blogEntry?.[1].date || "";
+
+  // Create structured data for the blog post
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description: description,
+    image: `https://skshmgpt.tech/${slug}.webp`,
+    datePublished: date,
+    author: {
+      "@type": "Person",
+      name: "Saksham Gupta",
+      url: "https://skshmgpt.tech",
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Saksham Gupta",
+      url: "https://skshmgpt.tech",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://skshmgpt.tech/blog/${slug}`,
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Blog slug={slug} />
+    </>
+  );
 }
