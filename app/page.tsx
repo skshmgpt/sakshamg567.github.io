@@ -68,6 +68,14 @@ export default async function App() {
       >
         <div className="mt-10 md:mt-0 mb-10 flex sm:flex-row items-center gap-5 rounded-md justify-between">
           <div className="flex flex-row gap-5 items-center">
+            <Image
+              src="/sonic.gif"
+              height={90}
+              width={90}
+              unoptimized
+              alt=""
+              className="rounded-full object-contain"
+              />
             <div className="scale-95 flex flex-col">
               <span className="font-semibold text-2xl sm:text-4xl -ml-1.5">
                 saksham gupta
@@ -88,7 +96,7 @@ export default async function App() {
                 <GitHub />
               </a>
             </Badge>
-          </div>
+          </div>  
         </div>
         <section id="about">
           <p className="mb-3 text-zinc-400 mt-2">
@@ -103,17 +111,17 @@ export default async function App() {
             <h1 className="font-bold text-xl sm:text-2xl mb-7 text-white">
               shipping at
             </h1>
-            <div className="flex flex-row place-content-between ">
+            <div className="flex flex-row place-content-between items-center">
               <div className="flex flex-row gap-3">
                 <Image
                   src={"/fs.webp"}
-                  width={50}
-                  height={50}
+                  width={65}
+                  height={65}
                   alt=""
-                  className="rounded-full object-contain object-left"
+                  className="rounded-full w-20 h-20"
                 />
                 <div className="flex flex-col -gap-2">
-                  <p className="font-bold">Freestand</p>
+                  <p className="font-bold mt-3">Freestand</p>
                   <p className="text-xs">full stack developer | intern</p>
                 </div>
               </div>

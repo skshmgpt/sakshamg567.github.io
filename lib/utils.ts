@@ -20,7 +20,7 @@ export function calculateReadTime(content: string): string {
   const wordCount = words.length;
   
   // Average reading speed: 200 words per minute
-  const readTimeMinutes = Math.ceil(wordCount / 200);
+  const readTimeMinutes = Math.ceil(wordCount / 120);
   
   return `${readTimeMinutes} min read`;
 }
