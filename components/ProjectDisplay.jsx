@@ -1,4 +1,4 @@
-import { ArrowOutwardRounded } from "@mui/icons-material";
+import { ArrowUpRight } from "lucide-react";
 import { Badge } from "./ui/badge";
 
 export default function ProjectDisplay({ title, details }) {
@@ -14,7 +14,7 @@ export default function ProjectDisplay({ title, details }) {
         <div className="flex justify-between items-start mb-2">
           <h3 className="font-bold text-lg">{title}</h3>
           <div className="flex gap-2">
-            <ArrowOutwardRounded />
+            <ArrowUpRight className="w-5 h-5" />
           </div>
         </div>
         <p className="text-gray-400 mb-3">{description}</p>
