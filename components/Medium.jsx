@@ -1,18 +1,22 @@
 import { forwardRef } from 'react';
 
-const Medium = forwardRef(({ fontSize = 'medium', sx, className, style, ...props }, ref) => {
-   // Convert MUI fontSize prop to actual size
-   const getSizeFromFontSize = (fontSize) => {
+const Medium = forwardRef(({ size = 20, fontSize, sx, className, style, ...props }, ref) => {
+   // Support both size (Lucide pattern) and fontSize (MUI pattern for backwards compatibility)
+   const getSizeFromProp = (size, fontSize) => {
+      // If size is provided (Lucide pattern), use it directly
+      if (size !== 20 || !fontSize) return size;
+      
+      // Otherwise, convert MUI fontSize prop to actual size for backwards compatibility
       switch (fontSize) {
-         case 'small': return '20';
-         case 'medium': return '24';
-         case 'large': return '35';
+         case 'small': return 20;
+         case 'medium': return 24;
+         case 'large': return 35;
          case 'inherit': return '1em';
-         default: return fontSize || '24';
+         default: return fontSize || 24;
       }
    };
 
-   const size = getSizeFromFontSize(fontSize);
+   const iconSize = getSizeFromProp(size, fontSize);
 
    return (
       <svg
@@ -22,8 +26,8 @@ const Medium = forwardRef(({ fontSize = 'medium', sx, className, style, ...props
          xmlns="http://www.w3.org/2000/svg"
          xmlnsXlink="http://www.w3.org/1999/xlink"
          preserveAspectRatio="xMidYMid"
-         width={size}
-         height={size}
+         width={iconSize}
+         height={iconSize}
          fill="currentColor"
          className={className}
          style={{ ...style, ...sx }}

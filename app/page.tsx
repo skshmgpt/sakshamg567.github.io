@@ -1,10 +1,11 @@
 import {
-  ArrowOutwardRounded,
-  Email,
-  GitHub,
-  LinkedIn,
+  Github,
+  Linkedin,
+  Mail,
+  Twitter,
   X,
-} from "@mui/icons-material";
+  ArrowUpRight,
+} from "lucide-react";
 import { Badge } from "@components/ui/badge";
 import ProjectDisplay from "@components/ProjectDisplay";
 import Social from "@components/Social";
@@ -72,8 +73,8 @@ export default async function App() {
               src="/sonic.gif"
               height={90}
               width={90}
-              unoptimized
-              alt=""
+              priority
+              alt="Sonic the Hedgehog profile animation"
               className="rounded-full object-contain"
               />
             <div className="scale-95 flex flex-col">
@@ -88,12 +89,12 @@ export default async function App() {
           <div className="flex flex-row items-center gap-2 sm:gap-4 scale-75 sm:scale-90">
             <Badge asChild className="border border-zinc-800 p-2 rounded-md">
               <a href="https://x.com/skshmgpt">
-                <X />
+                <X size={20} />
               </a>
             </Badge>
             <Badge asChild className="border border-zinc-800 p-2 rounded-md">
               <a href="https://github.com/skshmgpt">
-                <GitHub />
+                <Github size={20} />
               </a>
             </Badge>
           </div>  
@@ -149,7 +150,7 @@ export default async function App() {
               className="text-yellow-500 hover:underline items-center cursor-pointer"
             >
               all blogs
-              <ArrowOutwardRounded className="scale-80 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 ease-in-out -translate-y-[0.075rem] cursor-pointer p-0 m-0" />
+              <ArrowUpRight className="inline-block scale-80 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 ease-in-out -translate-y-[0.075rem] cursor-pointer p-0 m-0" size={16} />
             </Link>
           </div>
         </section>
@@ -171,7 +172,7 @@ export default async function App() {
               className="text-yellow-500 hover:underline items-center cursor-pointer"
             >
               all projects
-              <ArrowOutwardRounded className="scale-80 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 ease-in-out -translate-y-[0.075rem] cursor-pointer p-0 m-0" />
+              <ArrowUpRight className="inline-block scale-80 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 ease-in-out -translate-y-[0.075rem] cursor-pointer p-0 m-0" size={16} />
             </Link>
           </div>
         </section>
@@ -180,13 +181,13 @@ export default async function App() {
         <section id="contact">
           <div className="flex flex-row flex-wrap justify-center gap-6 text-gray-400 leading-relaxed tracking-wide text-sm">
             <Social
-              Icon={GitHub}
+              Icon={Github}
               Text={"Github"}
               Link={"https://github.com/skshmgpt"}
             />
             <Social Icon={X} Text={"Twitter"} Link={"https://x.com/skshmgpt"} />
             <Social
-              Icon={LinkedIn}
+              Icon={Linkedin}
               Text={"Linkedin"}
               Link={"https://linkedin.com/in/skshmgpt"}
             />
@@ -196,7 +197,7 @@ export default async function App() {
               Link={"https://skshmgpt.medium.com"}
             />
             <Social
-              Icon={Email}
+              Icon={Mail}
               Text={"Email"}
               Link={"mailto:saksham060306@gmail.com"}
             />

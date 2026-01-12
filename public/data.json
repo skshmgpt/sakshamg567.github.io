@@ -1,34 +1,39 @@
 {
   "Projects": {
-    "manimorph": {
-      "description": "Cursor For 2d animation (wip)",
-      "stack": "Next.js, Typescript, Docker, AI SDK, FastAPI",
-      "link": "https://manimorph.vercel.app"
+    "tinygit": {
+      "description": "A git like version control system written in go",
+      "stack": "Golang",
+      "link": "https://github.com/skshmgpt/tinygit"
+    },
+    "cachy": {
+      "description": "A distributed caching system built with Go and gRPC, featuring consistent hashing for scalable data distribution and LRU eviction policies",
+      "stack": "Golang, gRPC, protobuf",
+      "link": "https://github.com/skshmgpt/cachy"
+    },
+    "ratelimit": {
+      "description": "A simple token bucket rate limiter implementation, with per user tracking and burst handling",
+      "stack": "Golang, Redis, Lua",
+      "link": "https://github.com/skshmgpt/ratelimit"
     },
     "ftp-server": {
       "description": "File Transfer Protocol Server written in C",
       "stack": "C",
-      "link": "https://github.com/sakshamg567/FTP-from-Scratch"
-    },
-    "openchat": {
-      "description": "Opensource MultiLLM Chat Platform (t3-chat clone)",
-      "stack": "Next.js, Typescript, AI SDK, Convex",
-      "link": "https://open-chat-silk.vercel.app"
-    },
-    "pastty": {
-      "description": "Drop videos in tweets like magic",
-      "stack": "Javascript, NodeJS, yt-dlp",
-      "link": "https://pastty.vercel.app"
+      "link": "https://github.com/skshmgpt/FTP-from-Scratch"
     },
     "miniurl": {
       "description": "URL-Shortener built with microservice architecture",
       "stack": "Golang",
-      "link": "https://github.com/sakshamg567/miniurl"
+      "link": "https://github.com/skshmgpt/miniurl"
     },
     "getsetgo": {
       "description": "A simple redis clone built in go, compatible with resp-protocol",
       "stack": "Golang",
-      "link": "https://github.com/sakshamg567/getsetgo"
+      "link": "https://github.com/skshmgpt/getsetgo"
+    },
+    "pong": {
+      "description": "TUI Based Pong game written in golang, using goncurses for tui graphics, with lan multiplayer over tcp",
+      "stack": "Golang, goncurses",
+      "link": "https://github.com/skshmgpt/pong"
     }
   },
   "blogs": {
@@ -36,6 +41,10 @@
       "description": "",
       "date": "Jan 5, 2026",
       "slug": "git-internals"
+    },
+    "Redis From Scratch": {
+      "date": "Oct 16, 2025",
+      "slug": "redis-from-scratch"
     },
     "Journey of a request — Beyond the Protocols": {
       "description": "Have you ever thought about what goes behind the scenes when you make a request on the internet?",
