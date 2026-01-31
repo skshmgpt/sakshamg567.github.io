@@ -157,6 +157,11 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
+    --gitmap-empty: #1f1f1f;
+    --gitmap-level-1: #a16207;
+    --gitmap-level-2: #ca8a04;
+    --gitmap-level-3: #facc15;
+    --gitmap-level-4: #fde047;
 }
 
 .dark {
@@ -191,6 +196,11 @@
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
+    --gitmap-empty: #111111;
+    --gitmap-level-1: #854d0e;
+    --gitmap-level-2: #a16207;
+    --gitmap-level-3: #ca8a04;
+    --gitmap-level-4: #facc15;
 }
 
 @layer base {

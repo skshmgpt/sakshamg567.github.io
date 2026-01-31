@@ -3,9 +3,9 @@ import {
   Linkedin,
   Mail,
   Twitter,
-  X,
   ArrowUpRight,
 } from "lucide-react";
+import { FaXTwitter } from "react-icons/fa6";
 import { Badge } from "@components/ui/badge";
 import ProjectDisplay from "@components/ProjectDisplay";
 import Social from "@components/Social";
@@ -14,6 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 import BlogDisplay from "@/components/BlogsDisplay";
 import Noise from "@/components/Noise";
+import GitHubContribGraph from "@/components/GitHubContribGraph";
 import { readFile } from "fs/promises";
 import path from "path";
 import { calculateReadTime } from "@/lib/utils";
@@ -86,10 +87,10 @@ export default async function App() {
               </span>
             </div>
           </div>
-          <div className="flex flex-row items-center gap-2 sm:gap-4 scale-75 sm:scale-90">
+          <div className="flex flex-row items-center gap-2 scale-125">
             <Badge asChild className="border border-zinc-800 p-2 rounded-md">
               <a href="https://x.com/skshmgpt">
-                <X size={20} />
+                <FaXTwitter size={20} />
               </a>
             </Badge>
             <Badge asChild className="border border-zinc-800 p-2 rounded-md">
@@ -107,6 +108,9 @@ export default async function App() {
             kitchen doing real cooking :), or in the gym lifting some metal.
           </p>
         </section>
+        
+        <GitHubContribGraph />
+        
         <section className="mt-12">
           <div className="text-xs sm:text-sm">
             <h1 className="font-bold text-xl sm:text-2xl mb-7 text-white">
@@ -185,7 +189,7 @@ export default async function App() {
               Text={"Github"}
               Link={"https://github.com/skshmgpt"}
             />
-            <Social Icon={X} Text={"Twitter"} Link={"https://x.com/skshmgpt"} />
+            <Social Icon={FaXTwitter} Text={"Twitter"} Link={"https://x.com/skshmgpt"} />
             <Social
               Icon={Linkedin}
               Text={"Linkedin"}
