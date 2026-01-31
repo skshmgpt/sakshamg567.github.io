@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import { getRedisClient } from "@/lib/redis";
 
 interface ContributionDay {
   date: string;
@@ -12,7 +13,7 @@ interface GitHubResponse {
 }
 
 const CACHE_KEY = "github-contributions";
-const CACHE_DURATION = 6 * 60 * 60 * 1000; // 6 hours
+const CACHE_DURATION = 6 * 60 * 60; // 6 hours in seconds for Redis
 
 async function fetchGitHubContributions(): Promise<ContributionDay[]> {
   const query = `
@@ -89,39 +90,42 @@ function getLevel(level: string): number {
 }
 
 async function getCachedData(): Promise<GitHubResponse | null> {
-  const cache = (globalThis as any).cache;
-  if (typeof cache === 'undefined') {
+  try {
+    const redis = await getRedisClient();
+    
+    const cached = await redis.get(CACHE_KEY);
+    if (!cached) {
+      return null;
+    }
+
+    const data: GitHubResponse = JSON.parse(cached);
+    const now = Date.now();
+    
+    if (now - new Date(data.lastFetched).getTime() > CACHE_DURATION * 1000) {
+      await redis.del(CACHE_KEY);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.warn("Redis cache not available, proceeding without cache:", error);
     return null;
   }
-
-  const cached = await cache.get(CACHE_KEY);
-  if (!cached) {
-    return null;
-  }
-
-  const data: GitHubResponse = JSON.parse(cached);
-  const now = Date.now();
-  
-  if (now - new Date(data.lastFetched).getTime() > CACHE_DURATION) {
-    await cache.delete(CACHE_KEY);
-    return null;
-  }
-
-  return data;
 }
 
 async function setCachedData(contributions: ContributionDay[]): Promise<void> {
-  const cache = (globalThis as any).cache;
-  if (typeof cache === 'undefined') {
-    return;
+  try {
+    const redis = await getRedisClient();
+
+    const data: GitHubResponse = {
+      contributions,
+      lastFetched: new Date().toISOString(),
+    };
+
+    await redis.setEx(CACHE_KEY, CACHE_DURATION, JSON.stringify(data));
+  } catch (error) {
+    console.warn("Failed to cache data in Redis, proceeding without cache:", error);
   }
-
-  const data: GitHubResponse = {
-    contributions,
-    lastFetched: new Date().toISOString(),
-  };
-
-  await cache.put(CACHE_KEY, JSON.stringify(data));
 }
 
 export async function GET() {
