@@ -71,7 +71,7 @@ export default async function Image() {
               maxWidth: "900px",
             }}
           >
-            Backend · Distributed Systems · Networking · Infrastructure
+            Backend ·  Web ·  experiments  
           </p>
         </div>
       </div>
