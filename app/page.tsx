@@ -102,7 +102,7 @@ export default async function App() {
         </div>
         <section id="about">
           <p className="mb-3 text-zinc-400 mt-2">
-            i&apos;m a 19 y\o cs undergrad. i love writing softwares and solving
+            i&apos;m a 20 y\o cs undergrad. i love writing softwares and solving
             problems. interested in backend, distributed systems, networking and
             infra. when i&apos;m not cooking software, i&apos;m prolly in the
             kitchen doing real cooking :), or in the gym lifting some metal.

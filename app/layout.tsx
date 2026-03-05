@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | Saksham Gupta",
   },
   description:
-    "19 y/o CS undergrad passionate about backend development, distributed systems, networking, and infrastructure. Full Stack Developer Intern at Freestand.",
+    "20 y/o CS undergrad passionate about backend development, distributed systems, networking, and infrastructure. Full Stack Developer Intern at Freestand.",
   keywords: [
     "Saksham Gupta",
     "skshmgpt",
@@ -45,13 +45,13 @@ export const metadata: Metadata = {
     siteName: "Saksham Gupta",
     title: "Saksham Gupta - Full Stack Developer & CS Undergrad",
     description:
-      "19 y/o CS undergrad passionate about backend development, distributed systems, networking, and infrastructure.",
+      "20 y/o CS undergrad passionate about backend development, distributed systems, networking, and infrastructure.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Saksham Gupta - Full Stack Developer & CS Undergrad",
     description:
-      "19 y/o CS undergrad passionate about backend development, distributed systems, networking, and infrastructure.",
+      "20 y/o CS undergrad passionate about backend development, distributed systems, networking, and infrastructure.",
     creator: "@skshmgpt",
   },
   robots: {
