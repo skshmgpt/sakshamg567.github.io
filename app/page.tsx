@@ -18,6 +18,10 @@ import GitHubContribGraph from "@/components/GitHubContribGraph";
 import { readFile } from "fs/promises";
 import path from "path";
 import { calculateReadTime } from "@/lib/utils";
+import { Suspense } from "react";
+import { GitHubContributions, GitHubContributionsFallback } from "@/components/github-contributions/github-contributions";
+import { getCachedContributions } from "@/lib/get-cached-contributions";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 type Data = {
   Projects: {
@@ -55,159 +59,169 @@ export default async function App() {
     })
   );
 
+  const contributions = getCachedContributions("skshmgpt")
+
   return (
-    <div>
-      <Noise
-        patternSize={250}
-        patternScaleX={1}
-        patternScaleY={1}
-        patternRefreshInterval={2}
-        patternAlpha={7}
-      />
+    <Suspense fallback={<GitHubContributionsFallback />}>
 
-      <main
-        className={`flex min-h-screen flex-col text-white px-8 md:px-16 lg:px-24 my-8 max-w-5xl mx-auto z-100 relative font-berkeley-mono`}
-      >
-        <div className="mt-10 md:mt-0 mb-10 flex sm:flex-row items-center gap-5 rounded-md justify-between">
-          <div className="flex flex-row gap-5 items-center">
-            <Image
-              src="/sonic.gif"
-              height={90}
-              width={90}
-              priority
-              alt="Sonic the Hedgehog profile animation"
-              className="rounded-full object-contain"
+      <div>
+        <Noise
+          patternSize={250}
+          patternScaleX={1}
+          patternScaleY={1}
+          patternRefreshInterval={2}
+          patternAlpha={7}
+        />
+
+        <main
+          className={`flex min-h-screen flex-col text-white px-8 md:px-16 lg:px-24 my-8 max-w-5xl mx-auto z-100 relative font-berkeley-mono`}
+        >
+          <div className="mt-10 md:mt-0 mb-10 flex sm:flex-row items-center gap-5 rounded-md justify-between">
+            <div className="flex flex-row gap-5 items-center">
+              <Image
+                src="/sonic.gif"
+                height={90}
+                width={90}
+                priority
+                alt="Sonic the Hedgehog profile animation"
+                className="rounded-full object-contain"
               />
-            <div className="scale-95 flex flex-col">
-              <span className="font-semibold text-2xl sm:text-4xl -ml-1.5">
-                saksham gupta
-              </span>
-              <span className="text-zinc-500 text-sm sm:text-base">
-                @skshmgpt
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-row items-center gap-2 scale-125">
-            <Badge asChild className="border border-zinc-800 p-2 rounded-md">
-              <a href="https://x.com/skshmgpt">
-                <FaXTwitter size={20} />
-              </a>
-            </Badge>
-            <Badge asChild className="border border-zinc-800 p-2 rounded-md">
-              <a href="https://github.com/skshmgpt">
-                <Github size={20} />
-              </a>
-            </Badge>
-          </div>  
-        </div>
-        <section id="about">
-          <p className="mb-3 text-zinc-400 mt-2">
-            i&apos;m a 20 y\o cs undergrad. i love writing softwares and solving
-            problems. interested in backend, distributed systems, networking and
-            infra. when i&apos;m not cooking software, i&apos;m prolly in the
-            kitchen doing real cooking :), or in the gym lifting some metal.
-          </p>
-        </section>
-        
-        <GitHubContribGraph />
-        
-        <section className="mt-12">
-          <div className="text-xs sm:text-sm">
-            <h1 className="font-bold text-xl sm:text-2xl mb-7 text-white">
-              shipping at
-            </h1>
-            <div className="flex flex-row place-content-between items-center">
-              <div className="flex flex-row gap-3">
-                <Image
-                  src={"/fs.webp"}
-                  width={65}
-                  height={65}
-                  alt=""
-                  className="rounded-full w-20 h-20"
-                />
-                <div className="flex flex-col -gap-2">
-                  <p className="font-bold mt-3">Freestand</p>
-                  <p className="text-xs">full stack developer | intern</p>
-                </div>
+              <div className="scale-95 flex flex-col">
+                <span className="font-semibold text-2xl sm:text-4xl -ml-1.5">
+                  saksham gupta
+                </span>
+                <span className="text-zinc-500 text-sm sm:text-base">
+                  @skshmgpt
+                </span>
               </div>
-              <p className="text-zinc-400">december 2025 - present</p>
+            </div>
+            <div className="flex flex-row items-center gap-2 scale-125">
+              <Badge asChild className="border border-zinc-800 p-2 rounded-md">
+                <a href="https://x.com/skshmgpt">
+                  <FaXTwitter size={20} />
+                </a>
+              </Badge>
+              <Badge asChild className="border border-zinc-800 p-2 rounded-md">
+                <a href="https://github.com/skshmgpt">
+                  <Github size={20} />
+                </a>
+              </Badge>
             </div>
           </div>
-        </section>
+          <section id="about">
+            <p className="mb-3 text-zinc-400 mt-2">
+              i&apos;m a 20 y\o cs undergrad. i love writing softwares and solving
+              problems. interested in backend, distributed systems, networking and
+              infra. when i&apos;m not cooking software, i&apos;m prolly in the
+              kitchen doing real cooking :), or in the gym lifting some metal.
+            </p>
+          </section>
+          <TooltipProvider>
+            <GitHubContributions
+              contributions={contributions}
+              githubProfileUrl="https://github.com/skshmgpt"
+            />
+          </TooltipProvider>
 
-        <section id="Blogs" className="mt-12 ">
-          <div className="text-gray-400 text-xs sm:text-sm">
-            <h1 className="font-bold text-xl sm:text-2xl text-white mb-4">
-              Blogs
-            </h1>
-            {blogsWithReadTime
-              .slice(2)
-              .map(({ title, details }) => (
-                <div key={title} className="mb-5">
-                  <BlogDisplay title={title} details={details} />
+          <section className="mt-12">
+            <div className="text-xs sm:text-sm">
+              <h1 className="font-bold text-xl sm:text-2xl mb-7 text-white">
+                shipping at
+              </h1>
+              <div className="flex flex-row place-content-between items-center">
+                <div className="flex flex-row gap-3">
+                  <Image
+                    src={"/fs.webp"}
+                    width={65}
+                    height={65}
+                    alt=""
+                    className="rounded-full w-20 h-20"
+                  />
+                  <div className="flex flex-col -gap-2">
+                    <p className="font-bold mt-3">Freestand</p>
+                    <p className="text-xs">full stack developer | intern</p>
+                  </div>
                 </div>
-              ))}
-          </div>
-          <div className="group p-0.5 cursor-pointer">
-            <Link
-              href="/blog"
-              className="text-yellow-500 hover:underline items-center cursor-pointer"
-            >
-              all blogs
-              <ArrowUpRight className="inline-block scale-80 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 ease-in-out -translate-y-[0.075rem] cursor-pointer p-0 m-0" size={16} />
-            </Link>
-          </div>
-        </section>
+                <p className="text-zinc-400">december 2025 - present</p>
+              </div>
+            </div>
+          </section>
 
-        <section id="projects" className="mt-12">
-          <div className="text-gray-400 text-xs sm:text-sm">
-            <h1 className="font-bold text-xl sm:text-2xl text-white mb-7">
-              projects
-            </h1>
-            {Object.entries(data.Projects)
-              .slice(0, 2)
-              .map(([Title, details]) => (
-                <ProjectDisplay key={Title} title={Title} details={details} />
-              ))}
-          </div>
-          <div className="group p-0.5 cursor-pointer">
-            <Link
-              href="/projects"
-              className="text-yellow-500 hover:underline items-center cursor-pointer"
-            >
-              all projects
-              <ArrowUpRight className="inline-block scale-80 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 ease-in-out -translate-y-[0.075rem] cursor-pointer p-0 m-0" size={16} />
-            </Link>
-          </div>
-        </section>
+          <section id="Blogs" className="mt-12 ">
+            <div className="text-gray-400 text-xs sm:text-sm">
+              <h1 className="font-bold text-xl sm:text-2xl text-white mb-4">
+                Blogs
+              </h1>
+              {blogsWithReadTime
+                .slice(2)
+                .map(({ title, details }) => (
+                  <div key={title} className="mb-5">
+                    <BlogDisplay title={title} details={details} />
+                  </div>
+                ))}
+            </div>
+            <div className="group p-0.5 cursor-pointer">
+              <Link
+                href="/blog"
+                className="text-yellow-500 hover:underline items-center cursor-pointer"
+              >
+                all blogs
+                <ArrowUpRight className="inline-block scale-80 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 ease-in-out -translate-y-[0.075rem] cursor-pointer p-0 m-0" size={16} />
+              </Link>
+            </div>
+          </section>
 
-        <hr className="my-5 border-zinc-800" />
-        <section id="contact">
-          <div className="flex flex-row flex-wrap justify-center gap-6 text-gray-400 leading-relaxed tracking-wide text-sm">
-            <Social
-              Icon={Github}
-              Text={"Github"}
-              Link={"https://github.com/skshmgpt"}
-            />
-            <Social Icon={FaXTwitter} Text={"Twitter"} Link={"https://x.com/skshmgpt"} />
-            <Social
-              Icon={Linkedin}
-              Text={"Linkedin"}
-              Link={"https://linkedin.com/in/skshmgpt"}
-            />
-            <Social
-              Icon={Medium}
-              Text={"Medium"}
-              Link={"https://skshmgpt.medium.com"}
-            />
-            <Social
-              Icon={Mail}
-              Text={"Email"}
-              Link={"mailto:saksham060306@gmail.com"}
-            />
-          </div>
-        </section>
-      </main>
-    </div>
+          <section id="projects" className="mt-12">
+            <div className="text-gray-400 text-xs sm:text-sm">
+              <h1 className="font-bold text-xl sm:text-2xl text-white mb-7">
+                projects
+              </h1>
+              {Object.entries(data.Projects)
+                .slice(0, 2)
+                .map(([Title, details]) => (
+                  <ProjectDisplay key={Title} title={Title} details={details} />
+                ))}
+            </div>
+            <div className="group p-0.5 cursor-pointer">
+              <Link
+                href="/projects"
+                className="text-yellow-500 hover:underline items-center cursor-pointer"
+              >
+                all projects
+                <ArrowUpRight className="inline-block scale-80 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 ease-in-out -translate-y-[0.075rem] cursor-pointer p-0 m-0" size={16} />
+              </Link>
+            </div>
+          </section>
+
+          <hr className="my-5 border-zinc-800" />
+          <section id="contact">
+            <div className="flex flex-row flex-wrap justify-center gap-6 text-gray-400 leading-relaxed tracking-wide text-sm">
+              <Social
+                Icon={Github}
+                Text={"Github"}
+                Link={"https://github.com/skshmgpt"}
+              />
+              <Social Icon={FaXTwitter} Text={"Twitter"} Link={"https://x.com/skshmgpt"} />
+              <Social
+                Icon={Linkedin}
+                Text={"Linkedin"}
+                Link={"https://linkedin.com/in/skshmgpt"}
+              />
+              <Social
+                Icon={Medium}
+                Text={"Medium"}
+                Link={"https://skshmgpt.medium.com"}
+              />
+              <Social
+                Icon={Mail}
+                Text={"Email"}
+                Link={"mailto:saksham060306@gmail.com"}
+              />
+            </div>
+          </section>
+        </main>
+      </div>
+
+    </Suspense>
   );
 }
