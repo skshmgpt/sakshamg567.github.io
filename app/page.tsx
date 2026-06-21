@@ -1,20 +1,11 @@
-import {
-  Github,
-  Linkedin,
-  Mail,
-  Twitter,
-  ArrowUpRight,
-} from "lucide-react";
-import { FaXTwitter } from "react-icons/fa6";
-import { Badge } from "@components/ui/badge";
 import ProjectDisplay from "@components/ProjectDisplay";
-import Social from "@components/Social";
-import Medium from "@components/Medium";
 import Image from "next/image";
 import Link from "next/link";
 import BlogDisplay from "@/components/BlogsDisplay";
 import Noise from "@/components/Noise";
-import GitHubContribGraph from "@/components/GitHubContribGraph";
+import DividerSlash from "@/components/DividerSlash";
+import Scratchpad from "@/components/Scratchpad";
+import SpotifyPlaceholder from "@/components/SpotifyPlaceholder";
 import { readFile } from "fs/promises";
 import path from "path";
 import { calculateReadTime } from "@/lib/utils";
@@ -47,7 +38,6 @@ export default async function App() {
   );
   const data = JSON.parse(dataFile) as Data;
 
-  // Calculate read times for blogs
   const blogsWithReadTime = await Promise.all(
     Object.entries(data.blogs).map(async ([title, details]) => {
       const content = await readFile(
@@ -59,11 +49,10 @@ export default async function App() {
     })
   );
 
-  const contributions = getCachedContributions("skshmgpt")
+  const contributions = getCachedContributions("skshmgpt");
 
   return (
     <Suspense fallback={<GitHubContributionsFallback />}>
-
       <div>
         <Noise
           patternSize={250}
@@ -73,155 +62,232 @@ export default async function App() {
           patternAlpha={7}
         />
 
-        <main
-          className={`flex min-h-screen flex-col text-white px-8 md:px-16 lg:px-24 my-8 max-w-5xl mx-auto z-100 relative font-berkeley-mono`}
-        >
-          <div className="mt-10 md:mt-0 mb-10 flex sm:flex-row items-center gap-5 rounded-md justify-between">
-            <div className="flex flex-row gap-5 items-center">
+        <main className="container-grid relative z-10">
+          {/* Hero */}
+          <div className="flex flex-col gap-4.5 px-12 py-10">
+            <div className="flex flex-row items-center gap-2.5">
               <Image
                 src="/sonic.gif"
-                height={90}
-                width={90}
-                priority
-                alt="Sonic the Hedgehog profile animation"
+                height={26}
+                width={26}
+                alt=""
                 className="rounded-full object-contain"
               />
-              <div className="scale-95 flex flex-col">
-                <span className="font-semibold text-2xl sm:text-4xl -ml-1.5">
-                  saksham gupta
-                </span>
-                <span className="text-zinc-500 text-sm sm:text-base">
-                  @skshmgpt
-                </span>
-              </div>
+              <h1 className="font-mono text-[26px] font-semibold text-[#F0F0EB] tracking-[-0.02em]">
+                saksham gupta
+              </h1>
             </div>
-            <div className="flex flex-row items-center gap-2 scale-125">
-              <Badge asChild className="border border-zinc-800 p-2 rounded-md">
-                <a href="https://x.com/skshmgpt">
-                  <FaXTwitter size={20} />
-                </a>
-              </Badge>
-              <Badge asChild className="border border-zinc-800 p-2 rounded-md">
-                <a href="https://github.com/skshmgpt">
-                  <Github size={20} />
-                </a>
-              </Badge>
+            <p className="font-mono text-[14px] text-[#889988] leading-relaxed max-w-xl">
+              cs undergrad at maharaja agrasen institute of technology. i build
+              backend systems and developer tools. currently engineering at
+              freestand. i write about databases, networks, and systems
+              internals.
+            </p>
+            <div className="flex flex-row gap-5">
+              <a
+                data-nav
+                href="https://github.com/skshmgpt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[11px] text-[#00FF41] hover:underline"
+              >
+                gh
+              </a>
+              <a
+                data-nav
+                href="https://x.com/skshmgpt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[11px] text-[#889988] hover:text-[#F0F0EB] transition-colors"
+              >
+                tw
+              </a>
+              <a
+                data-nav
+                href="https://linkedin.com/in/skshmgpt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[11px] text-[#889988] hover:text-[#F0F0EB] transition-colors"
+              >
+                li
+              </a>
+              <a
+                data-nav
+                href="mailto:saksham060306@gmail.com"
+                className="font-mono text-[11px] text-[#889988] hover:text-[#F0F0EB] transition-colors"
+              >
+                em
+              </a>
+            </div>
+
+            <SpotifyPlaceholder />
+          </div>
+
+          <DividerSlash />
+
+          {/* Scratchpad */}
+          <Scratchpad />
+
+          <DividerSlash />
+
+          {/* Currently */}
+          <div className="flex flex-col gap-4 px-12 py-10">
+            <span className="font-mono text-[10px] font-medium text-[#00FF41] tracking-[0.08em] uppercase">
+              currently
+            </span>
+            <div className="flex flex-row justify-between items-start">
+              <div className="flex flex-col gap-1.5">
+                <h3 className="font-mono text-[17px] font-medium text-[#F0F0EB]">
+                  Freestand
+                </h3>
+                <span className="font-mono text-[12px] text-[#889988]">
+                  full-stack developer · intern
+                </span>
+                <p className="font-mono text-[13px] text-[#889988] leading-relaxed mt-1.5 max-w-md">
+                  Building fintech infrastructure — payment systems, developer
+                  dashboards, and internal tooling across the stack.
+                </p>
+              </div>
+              <span className="font-mono text-[10px] text-[#00FF41] tracking-[0.04em] shrink-0">
+                dec 2025 – present
+              </span>
             </div>
           </div>
-          <section id="about">
-            <p className="mb-3 text-zinc-400 mt-2">
-              i&apos;m a 20 y\o cs undergrad. i love writing softwares and solving
-              problems. interested in backend, distributed systems, networking and
-              infra. when i&apos;m not cooking software, i&apos;m prolly in the
-              kitchen doing real cooking :), or in the gym lifting some metal.
-            </p>
-          </section>
-          <TooltipProvider>
-            <GitHubContributions
-              contributions={contributions}
-              githubProfileUrl="https://github.com/skshmgpt"
-            />
-          </TooltipProvider>
 
-          <section className="mt-12">
-            <div className="text-xs sm:text-sm">
-              <h1 className="font-bold text-xl sm:text-2xl mb-7 text-white">
-                shipping at
-              </h1>
-              <div className="flex flex-row place-content-between items-center">
-                <div className="flex flex-row gap-3">
-                  <Image
-                    src={"/fs.webp"}
-                    width={65}
-                    height={65}
-                    alt=""
-                    className="rounded-full w-20 h-20"
-                  />
-                  <div className="flex flex-col -gap-2">
-                    <p className="font-bold mt-3">Freestand</p>
-                    <p className="text-xs">full stack developer | intern</p>
-                  </div>
-                </div>
-                <p className="text-zinc-400">december 2025 - present</p>
+          <DividerSlash />
+
+          {/* GitHub contributions */}
+          <div className="px-12 py-10">
+            <TooltipProvider>
+              <GitHubContributions
+                contributions={contributions}
+                githubProfileUrl="https://github.com/skshmgpt"
+              />
+            </TooltipProvider>
+          </div>
+
+          <DividerSlash />
+
+          {/* Writing */}
+          <div className="flex flex-col px-12 py-10">
+            <div className="flex flex-row justify-between items-center mb-7">
+              <span className="font-mono text-[10px] font-medium text-[#00FF41] tracking-[0.08em] uppercase">
+                writing
+              </span>
+              <Link
+                data-nav
+                href="/blog"
+                className="font-mono text-[11px] text-[#889988] hover:text-[#F0F0EB] transition-colors"
+              >
+                all posts →
+              </Link>
+            </div>
+            <div className="flex flex-col divide-y divide-[#1F1F1C]">
+              {blogsWithReadTime.slice(0, 3).map(({ title, details }) => (
+                <BlogDisplay key={title} title={title} details={details} />
+              ))}
+            </div>
+          </div>
+
+          <DividerSlash />
+
+          {/* Projects */}
+          <div className="flex flex-col px-12 py-10">
+            <div className="flex flex-row justify-between items-center mb-7">
+              <span className="font-mono text-[10px] font-medium text-[#00FF41] tracking-[0.08em] uppercase">
+                projects
+              </span>
+              <Link
+                data-nav
+                href="/projects"
+                className="font-mono text-[11px] text-[#889988] hover:text-[#F0F0EB] transition-colors"
+              >
+                all projects →
+              </Link>
+            </div>
+            <div className="flex flex-col divide-y divide-[#1F1F1C]">
+              {Object.entries(data.Projects)
+                .slice(0, 3)
+                .map(([title, details]) => (
+                  <ProjectDisplay key={title} title={title} details={details} />
+                ))}
+            </div>
+          </div>
+
+          <DividerSlash />
+
+          {/* Footer */}
+          <footer className="flex flex-col gap-6 px-12 py-10">
+            <div className="flex flex-row justify-between items-start">
+              <div className="flex flex-col gap-1.5">
+                <span className="font-mono text-[11px] text-[#00FF41]">~</span>
+                <span className="font-mono text-[11px] text-[#F0F0EB]">
+                  saksham gupta
+                </span>
+                <span className="font-mono text-[10px] text-[#889988]">
+                  cs · backend · tools
+                </span>
+                <span className="font-mono text-[10px] text-[#889988]">
+                  maharaja agrasen institute of technology
+                </span>
+              </div>
+              <div className="flex flex-col gap-1.5 items-end">
+                <a
+                  data-nav
+                  href="https://github.com/skshmgpt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-[11px] text-[#F0F0EB] hover:text-[#00FF41] transition-colors"
+                >
+                  gh
+                </a>
+                <a
+                  data-nav
+                  href="https://x.com/skshmgpt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-[11px] text-[#889988] hover:text-[#F0F0EB] transition-colors"
+                >
+                  tw
+                </a>
+                <a
+                  data-nav
+                  href="https://linkedin.com/in/skshmgpt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-[11px] text-[#889988] hover:text-[#F0F0EB] transition-colors"
+                >
+                  li
+                </a>
+                <a
+                  data-nav
+                  href="mailto:saksham060306@gmail.com"
+                  className="font-mono text-[11px] text-[#889988] hover:text-[#F0F0EB] transition-colors"
+                >
+                  em
+                </a>
               </div>
             </div>
-          </section>
-
-          <section id="Blogs" className="mt-12 ">
-            <div className="text-gray-400 text-xs sm:text-sm">
-              <h1 className="font-bold text-xl sm:text-2xl text-white mb-4">
-                Blogs
-              </h1>
-              {blogsWithReadTime
-                .slice(2)
-                .map(({ title, details }) => (
-                  <div key={title} className="mb-5">
-                    <BlogDisplay title={title} details={details} />
-                  </div>
-                ))}
+            <div className="flex flex-row justify-between">
+              <span className="font-mono text-[10px] text-[#889988]">
+                built w/ next.js · deployed on vercel
+              </span>
+              <div className="flex flex-row gap-4">
+                <a
+                  data-nav
+                  href="https://github.com/skshmgpt/sakshamg567.github.io"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-[10px] text-[#889988] hover:text-[#F0F0EB] transition-colors"
+                >
+                  source
+                </a>
+                <span className="font-mono text-[10px] text-[#889988]">rss</span>
+              </div>
             </div>
-            <div className="group p-0.5 cursor-pointer">
-              <Link
-                href="/blog"
-                className="text-yellow-500 hover:underline items-center cursor-pointer"
-              >
-                all blogs
-                <ArrowUpRight className="inline-block scale-80 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 ease-in-out -translate-y-[0.075rem] cursor-pointer p-0 m-0" size={16} />
-              </Link>
-            </div>
-          </section>
-
-          <section id="projects" className="mt-12">
-            <div className="text-gray-400 text-xs sm:text-sm">
-              <h1 className="font-bold text-xl sm:text-2xl text-white mb-7">
-                projects
-              </h1>
-              {Object.entries(data.Projects)
-                .slice(0, 2)
-                .map(([Title, details]) => (
-                  <ProjectDisplay key={Title} title={Title} details={details} />
-                ))}
-            </div>
-            <div className="group p-0.5 cursor-pointer">
-              <Link
-                href="/projects"
-                className="text-yellow-500 hover:underline items-center cursor-pointer"
-              >
-                all projects
-                <ArrowUpRight className="inline-block scale-80 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 ease-in-out -translate-y-[0.075rem] cursor-pointer p-0 m-0" size={16} />
-              </Link>
-            </div>
-          </section>
-
-          <hr className="my-5 border-zinc-800" />
-          <section id="contact">
-            <div className="flex flex-row flex-wrap justify-center gap-6 text-gray-400 leading-relaxed tracking-wide text-sm">
-              <Social
-                Icon={Github}
-                Text={"Github"}
-                Link={"https://github.com/skshmgpt"}
-              />
-              <Social Icon={FaXTwitter} Text={"Twitter"} Link={"https://x.com/skshmgpt"} />
-              <Social
-                Icon={Linkedin}
-                Text={"Linkedin"}
-                Link={"https://linkedin.com/in/skshmgpt"}
-              />
-              <Social
-                Icon={Medium}
-                Text={"Medium"}
-                Link={"https://skshmgpt.medium.com"}
-              />
-              <Social
-                Icon={Mail}
-                Text={"Email"}
-                Link={"mailto:saksham060306@gmail.com"}
-              />
-            </div>
-          </section>
+          </footer>
         </main>
       </div>
-
     </Suspense>
   );
 }

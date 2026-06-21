@@ -115,92 +115,92 @@
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);
     --color-card: var(--card);
-    --radius-sm: calc(var(--radius) - 4px);
-    --radius-md: calc(var(--radius) - 2px);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) + 4px);
-    --radius-2xl: calc(var(--radius) + 8px);
-    --radius-3xl: calc(var(--radius) + 12px);
-    --radius-4xl: calc(var(--radius) + 16px);
+    --radius-sm: 0px;
+    --radius-md: 0px;
+    --radius-lg: 0px;
+    --radius-xl: 0px;
+    --radius-2xl: 0px;
+    --radius-3xl: 0px;
+    --radius-4xl: 0px;
 }
 
 :root {
-    --radius: 0.625rem;
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    --radius: 0px;
+    --background: #0D0D0D;
+    --foreground: #F0F0EB;
+    --card: #111110;
+    --card-foreground: #F0F0EB;
+    --popover: #111110;
+    --popover-foreground: #F0F0EB;
+    --primary: #00FF41;
+    --primary-foreground: #0D0D0D;
+    --secondary: #111110;
+    --secondary-foreground: #F0F0EB;
+    --muted: #111110;
+    --muted-foreground: #889988;
+    --accent: #00FF41;
+    --accent-foreground: #0D0D0D;
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.646 0.222 41.116);
-    --chart-2: oklch(0.6 0.118 184.704);
-    --chart-3: oklch(0.398 0.07 227.392);
-    --chart-4: oklch(0.828 0.189 84.429);
-    --chart-5: oklch(0.769 0.188 70.08);
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
-    --gitmap-empty: #1f1f1f;
-    --gitmap-level-1: #a16207;
-    --gitmap-level-2: #ca8a04;
-    --gitmap-level-3: #facc15;
-    --gitmap-level-4: #fde047;
+    --border: #1F1F1C;
+    --input: #1F1F1C;
+    --ring: #00FF41;
+    --chart-1: #00FF41;
+    --chart-2: #2A5A2A;
+    --chart-3: #889988;
+    --chart-4: #1A3A1A;
+    --chart-5: #0D0D0D;
+    --sidebar: #0D0D0D;
+    --sidebar-foreground: #F0F0EB;
+    --sidebar-primary: #00FF41;
+    --sidebar-primary-foreground: #0D0D0D;
+    --sidebar-accent: #111110;
+    --sidebar-accent-foreground: #F0F0EB;
+    --sidebar-border: #1F1F1C;
+    --sidebar-ring: #00FF41;
+    --gitmap-empty: #111110;
+    --gitmap-level-1: #0A2E0A;
+    --gitmap-level-2: #1A3A1A;
+    --gitmap-level-3: #2A5A2A;
+    --gitmap-level-4: #00FF41;
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
+    --background: #0D0D0D;
+    --foreground: #F0F0EB;
+    --card: #111110;
+    --card-foreground: #F0F0EB;
+    --popover: #111110;
+    --popover-foreground: #F0F0EB;
+    --primary: #00FF41;
+    --primary-foreground: #0D0D0D;
+    --secondary: #111110;
+    --secondary-foreground: #F0F0EB;
+    --muted: #111110;
+    --muted-foreground: #889988;
+    --accent: #00FF41;
+    --accent-foreground: #0D0D0D;
     --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
-    --gitmap-empty: #111111;
-    --gitmap-level-1: #854d0e;
-    --gitmap-level-2: #a16207;
-    --gitmap-level-3: #ca8a04;
-    --gitmap-level-4: #facc15;
+    --border: #1F1F1C;
+    --input: #1F1F1C;
+    --ring: #00FF41;
+    --chart-1: #00FF41;
+    --chart-2: #2A5A2A;
+    --chart-3: #889988;
+    --chart-4: #1A3A1A;
+    --chart-5: #0D0D0D;
+    --sidebar: #0D0D0D;
+    --sidebar-foreground: #F0F0EB;
+    --sidebar-primary: #00FF41;
+    --sidebar-primary-foreground: #0D0D0D;
+    --sidebar-accent: #111110;
+    --sidebar-accent-foreground: #F0F0EB;
+    --sidebar-border: #1F1F1C;
+    --sidebar-ring: #00FF41;
+    --gitmap-empty: #111110;
+    --gitmap-level-1: #0A2E0A;
+    --gitmap-level-2: #1A3A1A;
+    --gitmap-level-3: #2A5A2A;
+    --gitmap-level-4: #00FF41;
 }
 
 @layer base {
@@ -214,4 +214,26 @@
 
 @utility link-underline {
     @apply underline decoration-current/30 decoration-1 underline-offset-3 transition-colors hover:decoration-current;
+}
+
+@utility container-grid {
+    @apply max-w-2xl mx-auto border-x border-border;
+}
+
+@utility divider-slash {
+    display: block;
+    font-family: var(--font-geist-mono);
+    font-size: 8px;
+    line-height: 1;
+    color: var(--border);
+    letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    user-select: none;
+    pointer-events: none;
+}
+
+[data-nav]:focus-visible {
+    outline: 1px solid #00FF41;
+    outline-offset: 2px;
 }

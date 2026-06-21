@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import LenisProvider from "@/components/LenisProvider";
+import TiksProvider from "@/components/TiksProvider";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -16,7 +13,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://skshmgpt.tech"),
   title: {
-    default: "Saksham Gupta - Full Stack Developer & CS Undergrad",
+    default: "Saksham Gupta — Full Stack Developer & CS Undergrad",
     template: "%s | Saksham Gupta",
   },
   description:
@@ -43,13 +40,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://skshmgpt.tech",
     siteName: "Saksham Gupta",
-    title: "Saksham Gupta - Full Stack Developer & CS Undergrad",
+    title: "Saksham Gupta — Full Stack Developer & CS Undergrad",
     description:
       "20 y/o CS undergrad passionate about backend development, distributed systems, networking, and infrastructure.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Saksham Gupta - Full Stack Developer & CS Undergrad",
+    title: "Saksham Gupta — Full Stack Developer & CS Undergrad",
     description:
       "20 y/o CS undergrad passionate about backend development, distributed systems, networking, and infrastructure.",
     creator: "@skshmgpt",
@@ -75,10 +72,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistMono.className} ${geistMono.variable} antialiased bg-black/94`}
+        className={`${geistMono.variable} antialiased font-berkeley-mono bg-[#0D0D0D] text-[#F0F0EB]`}
       >
-        <Navbar />
-        {children}
+        <TiksProvider>
+          <LenisProvider>
+            <Navbar />
+            {children}
+          </LenisProvider>
+        </TiksProvider>
       </body>
     </html>
   );
