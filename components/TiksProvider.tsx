@@ -18,7 +18,7 @@ export default function TiksProvider({
 
       try {
         const { tiks } = await import("@rexa-developer/tiks");
-        tiks.init();
+        tiks.init({ volume: 1.5 });
       } catch {
         // tiks is optional — fail silently
       }

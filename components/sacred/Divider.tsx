@@ -1,11 +1,10 @@
 import React from "react";
 
 interface DividerProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
   type?: "SINGLE" | "DOUBLE" | "GRADIENT";
 }
 
-export default function Divider({ type = "SINGLE", style, children }: DividerProps) {
+export default function Divider({ type = "SINGLE", style }: DividerProps) {
   if (type === "GRADIENT") {
     return (
       <div

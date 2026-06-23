@@ -1,7 +1,12 @@
 import Blog from "@/components/Blog";
 import BlogWrapper from "@/components/BlogWrapper";
+import BlogTOC from "@/components/BlogTOC";
+import SidebarLayout from "@/components/sacred/SidebarLayout";
+import { extractHeadings } from "@/lib/blog-headings";
 import data from "@/public/data.json";
 import type { Metadata } from "next";
+import fs from "fs/promises";
+import path from "path";
 
 export async function generateMetadata({
   params,
@@ -10,9 +15,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
 
-  // Find the blog title from data.json by matching the slug
   const blogEntry = Object.entries(data.blogs).find(
-    ([_, blog]) => blog.slug === slug,
+    ([, blog]) => blog.slug === slug,
   );
 
   const title = blogEntry ? blogEntry[0] : slug;
@@ -49,7 +53,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  return Object.entries(data.blogs).map(([_, blog]) => ({
+  return Object.entries(data.blogs).map(([, blog]) => ({
     slug: blog.slug,
   }));
 }
@@ -61,16 +65,20 @@ export default async function BlogPage({
 }) {
   const { slug } = await params;
 
-  // Find the blog entry for structured data
+  const content = await fs.readFile(
+    path.join(process.cwd(), "blogs", `${slug}.md`),
+    "utf-8",
+  );
+  const headings = extractHeadings(content);
+
   const blogEntry = Object.entries(data.blogs).find(
-    ([_, blog]) => blog.slug === slug,
+    ([, blog]) => blog.slug === slug,
   );
 
   const title = blogEntry ? blogEntry[0] : slug;
   const description = blogEntry?.[1].description || "";
   const date = blogEntry?.[1].date || "";
 
-  // Create structured data for the blog post
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -100,9 +108,36 @@ export default async function BlogPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <BlogWrapper slug={slug}>
-        <Blog slug={slug} />
-      </BlogWrapper>
+      <SidebarLayout
+        sidebar={<BlogTOC headings={headings} />}
+        defaultSidebarWidth={36}
+        isShowingHandle
+        className="h-[calc(100vh-6.75rem)] border-y border-[#1F1F1C]"
+      >
+        <main
+          data-blog-scroll-container
+          className="h-full min-h-0 overflow-y-auto overscroll-contain scroll-smooth"
+        >
+          <div className="mx-auto flex max-w-3xl flex-col px-6 py-8 md:px-12 lg:px-16">
+            <div className="mb-10 border-b border-[#1F1F1C] pb-8">
+              <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#00FF41]">
+                writing / {date}
+              </div>
+              <h1 className="mt-4 font-mono text-3xl font-bold leading-tight text-[#F0F0EB] md:text-5xl">
+                {title}
+              </h1>
+              {description ? (
+                <p className="mt-4 max-w-2xl font-inter text-base leading-7 text-[#889988] md:text-lg">
+                  {description}
+                </p>
+              ) : null}
+            </div>
+            <BlogWrapper slug={slug}>
+              <Blog slug={slug} />
+            </BlogWrapper>
+          </div>
+        </main>
+      </SidebarLayout>
     </>
   );
 }

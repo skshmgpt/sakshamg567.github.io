@@ -1,158 +1,215 @@
 "use server";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import fs from "fs/promises";
 import path from "path";
-import "highlight.js/styles/github-dark.css";
-import Image from "next/image";
-import { calculateReadTime } from "@/lib/utils";
+import CodeBlock from "@/components/sacred/CodeBlock";
+import ImageModal from "@/components/ImageModal";
+import { createHeadingIdGenerator } from "@/lib/blog-headings";
+
+function extractText(node: React.ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(extractText).join("");
+  if (node && typeof node === "object" && "props" in node) {
+    const props = node.props as { children?: React.ReactNode; className?: string };
+    return extractText(props.children);
+  }
+  return "";
+}
+
+function extractLanguage(children: React.ReactNode): string | undefined {
+  if (typeof children !== "object" || !children) return undefined;
+  if (Array.isArray(children)) {
+    for (const child of children) {
+      const lang = extractLanguage(child);
+      if (lang) return lang;
+    }
+    return undefined;
+  }
+  if ("props" in children) {
+    const props = children.props as { className?: string; children?: React.ReactNode };
+    if (props.className) {
+      const match = /language-(\w+)/.exec(props.className);
+      if (match) return match[1];
+    }
+    return extractLanguage(props.children);
+  }
+  return undefined;
+}
 
 export default async function Blog({ slug }: { slug: string }) {
   const content = await fs.readFile(
     path.join(process.cwd(), "blogs", `${slug}.md`),
     "utf-8",
   );
-
-  const readTime = calculateReadTime(content);
+  const getHeadingId = createHeadingIdGenerator();
 
   return (
-    <div className="flex flex-col text-white p-6 md:p-12 lg:p-16 max-w-4xl mx-auto relative">
-      <div className="mb-4 text-gray-400 text-sm">
-        {readTime}
-      </div>
-      <div className="markdown-body prose prose-invert max-w-none font-inter">
+    <div className="flex flex-col">
+      <div className="font-inter">
         <Markdown
           remarkPlugins={[remarkGfm]}
-          rehypePlugins={[rehypeRaw, rehypeHighlight]}
+          rehypePlugins={[rehypeRaw]}
           components={{
-            pre: ({ node, ...props }) => (
-              <pre
-                className="overflow-x-auto rounded-lg bg-zinc-900 border border-zinc-800 p-5 my-6 shadow-lg"
+            pre: ({ children, ...props }) => {
+              const lang = extractLanguage(children);
+              return (
+                <CodeBlock language={lang} {...props}>
+                  {extractText(children).replace(/\n$/, "")}
+                </CodeBlock>
+              );
+            },
+            code: ({ children, ...props }) => (
+              <code
+                className="bg-[#111110] border border-[#1F1F1C] px-2 py-0.5 text-sm font-mono text-[#00FF41]"
                 {...props}
-              />
+              >
+                {children}
+              </code>
             ),
-            code: ({ node, className, children, ...props }) => {
-              const match = /language-(\w+)/.exec(className || "");
-              return match ? (
-                <code className={`${className} text-sm`} {...props}>
-                  {children}
-                </code>
-              ) : (
-                <code
-                  className="bg-zinc-800 border border-zinc-700 px-2 py-0.5 rounded text-sm text-yellow-400 font-mono"
+            h1: ({ children, ...props }) => {
+              const id = getHeadingId(String(children));
+              return (
+                <h1
+                  id={id}
+                  className="text-3xl md:text-4xl font-bold text-[#F0F0EB] mt-12 mb-6 pb-3 border-b border-[#1F1F1C] first:mt-0 font-mono scroll-mt-6"
                   {...props}
                 >
                   {children}
-                </code>
+                </h1>
               );
             },
-            h1: ({ node, ...props }) => (
-              <h1
-                className="text-4xl md:text-5xl font-bold text-yellow-500 mt-12 mb-6 pb-3 border-b border-zinc-800 first:mt-0"
-                {...props}
-              />
-            ),
-            h2: ({ node, ...props }) => (
-              <h2
-                className="text-3xl md:text-4xl font-bold text-yellow-500 mt-10 mb-5 pb-2 border-b border-zinc-800"
-                {...props}
-              />
-            ),
-            h3: ({ node, ...props }) => (
-              <h3
-                className="text-2xl md:text-3xl font-bold text-yellow-500 mt-8 mb-4"
-                {...props}
-              />
-            ),
-            h4: ({ node, ...props }) => (
-              <h4
-                className="text-xl md:text-2xl font-semibold text-yellow-400 mt-6 mb-3"
-                {...props}
-              />
-            ),
-            p: ({ node, ...props }) => (
+            h2: ({ children, ...props }) => {
+              const id = getHeadingId(String(children));
+              return (
+                <h2
+                  id={id}
+                  className="text-2xl md:text-3xl font-bold text-[#F0F0EB] mt-10 mb-5 pb-2 border-b border-[#1F1F1C] font-mono scroll-mt-6"
+                  {...props}
+                >
+                  {children}
+                </h2>
+              );
+            },
+            h3: ({ children, ...props }) => {
+              const id = getHeadingId(String(children));
+              return (
+                <h3
+                  id={id}
+                  className="text-xl md:text-2xl font-bold text-[#F0F0EB] mt-8 mb-4 font-mono scroll-mt-6"
+                  {...props}
+                >
+                  {children}
+                </h3>
+              );
+            },
+            h4: ({ children, ...props }) => {
+              const id = getHeadingId(String(children));
+              return (
+                <h4
+                  id={id}
+                  className="text-lg md:text-xl font-semibold text-[#00FF41] mt-6 mb-3 font-mono scroll-mt-6"
+                  {...props}
+                >
+                  {children}
+                </h4>
+              );
+            },
+            h5: ({ children, ...props }) => {
+              const id = getHeadingId(String(children));
+              return (
+                <h5
+                  id={id}
+                  className="mt-5 mb-3 font-mono text-base font-semibold text-[#00FF41] scroll-mt-6"
+                  {...props}
+                >
+                  {children}
+                </h5>
+              );
+            },
+            h6: ({ children, ...props }) => {
+              const id = getHeadingId(String(children));
+              return (
+                <h6
+                  id={id}
+                  className="mt-5 mb-3 font-mono text-sm font-semibold uppercase tracking-[0.08em] text-[#889988] scroll-mt-6"
+                  {...props}
+                >
+                  {children}
+                </h6>
+              );
+            },
+            p: ({ ...props }) => (
               <p
-                className="text-gray-300 leading-[1.8] mb-5 text-base md:text-lg"
+                className="text-[#889988] leading-[1.8] mb-5 text-base md:text-lg font-inter"
                 {...props}
               />
             ),
-            a: ({ node, ...props }) => (
+            a: ({ ...props }) => (
               <a
-                className="text-yellow-500 hover:text-yellow-400 underline decoration-yellow-500/30 hover:decoration-yellow-400 transition-colors"
+                className="text-[#00FF41] hover:underline underline-offset-2 transition-colors"
                 {...props}
               />
             ),
-            ul: ({ node, ...props }) => (
+            ul: ({ ...props }) => (
               <ul
-                className="list-disc ml-6 mb-6 text-gray-300 space-y-2 marker:text-yellow-500"
+                className="list-disc ml-6 mb-6 text-[#889988] space-y-2 marker:text-[#00FF41]"
                 {...props}
               />
             ),
-            ol: ({ node, ...props }) => (
+            ol: ({ ...props }) => (
               <ol
-                className="list-decimal ml-6 mb-6 text-gray-300 space-y-2 marker:text-yellow-500 marker:font-semibold"
+                className="list-decimal ml-6 mb-6 text-[#889988] space-y-2 marker:text-[#00FF41] marker:font-semibold"
                 {...props}
               />
             ),
-            li: ({ node, ...props }) => (
-              <li className="text-gray-300 leading-[1.7] pl-2" {...props} />
+            li: ({ ...props }) => (
+              <li className="text-[#889988] leading-[1.7] pl-2 font-inter" {...props} />
             ),
-            blockquote: ({ node, ...props }) => (
+            blockquote: ({ ...props }) => (
               <blockquote
-                className="border-l-4 border-yellow-500 pl-6 pr-4 py-2 my-6 bg-zinc-900/50 italic text-gray-400 rounded-r"
+                className="border-l-4 border-[#00FF41] pl-6 pr-4 py-2 my-6 bg-[#111110] italic text-[#889988]"
                 {...props}
               />
             ),
-            hr: ({ node, ...props }) => (
-              <hr
-                className="my-10 border-t-2 border-zinc-800"
-                {...props}
-              />
+            hr: ({ ...props }) => (
+              <hr className="my-10 border-t border-[#1F1F1C]" {...props} />
             ),
-            table: ({ node, ...props }) => (
+            table: ({ ...props }) => (
               <div className="overflow-x-auto my-6">
                 <table
-                  className="min-w-full border-collapse border border-zinc-800 rounded-lg"
+                  className="min-w-full border-collapse border border-[#1F1F1C]"
                   {...props}
                 />
               </div>
             ),
-            thead: ({ node, ...props }) => (
-              <thead className="bg-zinc-900" {...props} />
+            thead: ({ ...props }) => (
+              <thead className="bg-[#111110]" {...props} />
             ),
-            th: ({ node, ...props }) => (
+            th: ({ ...props }) => (
               <th
-                className="border border-zinc-800 px-4 py-3 text-left text-yellow-500 font-semibold"
+                className="border border-[#1F1F1C] px-4 py-3 text-left text-[#00FF41] font-semibold font-mono"
                 {...props}
               />
             ),
-            td: ({ node, ...props }) => (
+            td: ({ ...props }) => (
               <td
-                className="border border-zinc-800 px-4 py-3 text-gray-300"
+                className="border border-[#1F1F1C] px-4 py-3 text-[#889988] font-inter"
                 {...props}
               />
             ),
-            tr: ({ node, ...props }) => (
-              <tr className="hover:bg-zinc-900/30 transition-colors" {...props} />
+            tr: ({ ...props }) => (
+              <tr className="hover:bg-[#111110] transition-colors" {...props} />
             ),
-            strong: ({ node, ...props }) => (
-              <strong className="text-white font-semibold" {...props} />
+            strong: ({ ...props }) => (
+              <strong className="text-[#F0F0EB] font-semibold" {...props} />
             ),
-            em: ({ node, ...props }) => (
-              <em className="text-gray-200 italic" {...props} />
+            em: ({ ...props }) => (
+              <em className="text-[#889988] italic" {...props} />
             ),
             img: ({ src, alt }) => (
-              <div className="relative w-full my-8">
-                <Image
-                  src={src as string}
-                  alt={alt ?? ""}
-                  width={1200}
-                  height={630}
-                  className="rounded-lg border border-zinc-800 shadow-xl w-full h-auto"
-                />
-              </div>
+              <ImageModal src={src as string} alt={alt ?? ""} />
             ),
           }}
         >

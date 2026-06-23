@@ -21,7 +21,7 @@ export default async function Scratchpad() {
       <div className="flex flex-row items-center gap-2.5">
         <div className="w-1.5 h-1.5 rounded-full bg-[#00FF41]" />
         <span className="font-mono text-[10px] font-medium text-[#00FF41] tracking-[0.08em] uppercase">
-          now
+          log
         </span>
       </div>
       <p className="font-mono text-[15px] text-[#F0F0EB] leading-relaxed">

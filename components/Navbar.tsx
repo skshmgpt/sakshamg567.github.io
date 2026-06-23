@@ -6,7 +6,7 @@ import { useTiksSounds } from "@/hooks/use-tiks-sounds";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-const ROUTES = ["/", "/blog", "/projects"] as const;
+const ROUTES = ["/", "/about", "/blog", "/projects"] as const;
 
 export default function Navbar() {
   const router = useRouter();
@@ -35,6 +35,9 @@ export default function Navbar() {
         <div className="font-mono text-[11px] text-[#00FF41] px-4">~</div>
         <button data-nav onClick={() => handleNav("/")} className={linkStyle("/")}>
           index
+        </button>
+        <button data-nav onClick={() => handleNav("/about")} className={linkStyle("/about")}>
+          about
         </button>
         <button data-nav onClick={() => handleNav("/blog")} className={linkStyle("/blog")}>
           writing

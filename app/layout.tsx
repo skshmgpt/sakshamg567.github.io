@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import LenisProvider from "@/components/LenisProvider";
 import TiksProvider from "@/components/TiksProvider";
 
 const geistMono = Geist_Mono({
@@ -75,10 +74,8 @@ export default function RootLayout({
         className={`${geistMono.variable} antialiased font-berkeley-mono bg-[#0D0D0D] text-[#F0F0EB]`}
       >
         <TiksProvider>
-          <LenisProvider>
             <Navbar />
             {children}
-          </LenisProvider>
         </TiksProvider>
       </body>
     </html>

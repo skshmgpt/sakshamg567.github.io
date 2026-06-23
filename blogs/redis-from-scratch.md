@@ -67,7 +67,8 @@ Here’s the RESP representation of it
 
 ```
 *3\r\n$3\r\nset\r\n$5\r\nname\r\n$5\r\nsaksham
-```![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*uxmNzMfm6-UpF6Cm3DicXQ.png)
+```
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*uxmNzMfm6-UpF6Cm3DicXQ.png)
 
 simplifying,
 

@@ -20,16 +20,22 @@ export default function MetricsTracker({ slug }: MetricsTrackerProps) {
     return "";
   });
 
-  const startTimeRef = useRef<number>(Date.now());
+  const startTimeRef = useRef<number | null>(null);
   const maxScrollDepthRef = useRef<number>(0);
   const metricsReportedRef = useRef<boolean>(false);
 
   useEffect(() => {
+    startTimeRef.current = Date.now();
+    const scrollContainer = document.querySelector<HTMLElement>(
+      "[data-blog-scroll-container]"
+    );
+
     // Track scroll depth
     const handleScroll = () => {
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.scrollY;
+      const windowHeight = scrollContainer?.clientHeight ?? window.innerHeight;
+      const documentHeight =
+        scrollContainer?.scrollHeight ?? document.documentElement.scrollHeight;
+      const scrollTop = scrollContainer?.scrollTop ?? window.scrollY;
       const scrollDepth = Math.round(
         ((scrollTop + windowHeight) / documentHeight) * 100
       );
@@ -44,7 +50,9 @@ export default function MetricsTracker({ slug }: MetricsTrackerProps) {
       if (metricsReportedRef.current) return;
       metricsReportedRef.current = true;
 
-      const readingTimeSpent = Math.round((Date.now() - startTimeRef.current) / 1000);
+      const readingTimeSpent = Math.round(
+        (Date.now() - (startTimeRef.current ?? Date.now())) / 1000
+      );
       const scrollDepth = maxScrollDepthRef.current;
       const referrer = document.referrer || "direct";
 
@@ -67,7 +75,8 @@ export default function MetricsTracker({ slug }: MetricsTrackerProps) {
     };
 
     // Add event listeners
-    window.addEventListener("scroll", handleScroll);
+    scrollContainer?.addEventListener("scroll", handleScroll, { passive: true });
+    if (!scrollContainer) window.addEventListener("scroll", handleScroll);
     window.addEventListener("beforeunload", reportMetrics);
 
     // Also report metrics on visibility change (when tab becomes hidden)
@@ -83,7 +92,8 @@ export default function MetricsTracker({ slug }: MetricsTrackerProps) {
 
     // Cleanup
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      scrollContainer?.removeEventListener("scroll", handleScroll);
+      if (!scrollContainer) window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("beforeunload", reportMetrics);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       reportMetrics();
