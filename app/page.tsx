@@ -100,10 +100,8 @@ export default function App() {
 
         <DividerSlash />
 
-        {/* Scratchpad — streams */}
-        <Suspense fallback={sectionFallback}>
-          <Scratchpad />
-        </Suspense>
+        {/* Scratchpad — live */}
+        <Scratchpad />
 
         <DividerSlash />
 

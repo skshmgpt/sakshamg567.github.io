@@ -1,4 +1,11 @@
-import { getScratchpad } from "@/lib/scratchpad";
+"use client";
+
+import { useEffect, useState } from "react";
+
+interface ScratchpadData {
+  text: string;
+  updatedAt: number;
+}
 
 function relativeTime(ts: number): string {
   const diff = Date.now() - ts;
@@ -11,8 +18,25 @@ function relativeTime(ts: number): string {
   return `~ ${days} day${days > 1 ? "s" : ""} ago`;
 }
 
-export default async function Scratchpad() {
-  const data = await getScratchpad();
+export default function Scratchpad() {
+  const [data, setData] = useState<ScratchpadData | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchScratchpad() {
+      try {
+        const res = await fetch("/api/scratchpad");
+        const json = await res.json();
+        if (!cancelled && json.text) setData(json);
+      } catch {
+        // fail silently
+      }
+    }
+
+    fetchScratchpad();
+    return () => { cancelled = true; };
+  }, []);
 
   if (!data || !data.text) return null;
 
