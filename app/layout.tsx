@@ -3,6 +3,7 @@ import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import TiksProvider from "@/components/TiksProvider";
+import DynamicFavicon from "@/components/DynamicFavicon";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -74,6 +75,7 @@ export default function RootLayout({
         className={`${geistMono.variable} antialiased font-berkeley-mono bg-[#0D0D0D] text-[#F0F0EB]`}
       >
         <TiksProvider>
+            <DynamicFavicon />
             <Navbar />
             {children}
         </TiksProvider>
