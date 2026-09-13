@@ -8,6 +8,11 @@ import DynamicFavicon from "@/components/DynamicFavicon";
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  preload: true,
+  adjustFontFallback: true,
+  fallback: ["monospace"],
 });
 
 export const metadata: Metadata = {

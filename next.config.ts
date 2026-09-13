@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ['lucide-react'], // Tree-shake lucide icons
+    optimizePackageImports: ['lucide-react', 'date-fns'], // Tree-shake lucide icons + date-fns
   },
 };
 

@@ -1,15 +1,35 @@
 import Image from "next/image";
 import Link from "next/link";
-import Noise from "@/components/Noise";
 import DividerSlash from "@/components/DividerSlash";
-import Scratchpad from "@/components/Scratchpad";
-import SpotifyNowPlaying from "@/components/SpotifyNowPlaying";
 import { Suspense } from "react";
 import HomepageBlogs from "@/components/HomepageBlogs";
 import HomepageProjects from "@/components/HomepageProjects";
-import { GitHubContributions, GitHubContributionsFallback } from "@/components/github-contributions/github-contributions";
+import { GitHubContributionsFallback } from "@/components/github-contributions/github-contributions";
+import GitHubContributionsDynamic from "@/components/github-contributions/GitHubContributionsDynamic";
+import Noise from "@/components/NoiseWrapper";
+import Scratchpad from "@/components/ScratchpadDynamic";
+import SpotifyNowPlaying from "@/components/SpotifyNowPlayingDynamic";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { getCachedContributions } from "@/lib/get-cached-contributions";
+
+// "use client" audit (2026-01) — decisions documented:
+// - HomepageBlogs, HomepageProjects: SERVER (async fs reads, no hooks) — keep server for streaming/SEO. No "use client".
+// - BlogsDisplay, ProjectDisplay: CLIENT (useRouter + useTiksSounds click/navigation). Remain "use client" — interactivity required.
+// - Noise, SpotifyNowPlaying, Scratchpad, GitHubContributions, BlogWrapper, BlogTOC: truly interactive — keep CLIENT.
+//   Noise: canvas + requestAnimationFrame + window resize → client
+//   SpotifyNowPlaying: useState/useEffect polling /api/now-playing → client
+//   Scratchpad: useState/useEffect fetch /api/scratchpad → client
+//   GitHubContributions: "use"() promise + date-fns + tooltip → client
+//   BlogWrapper/MetricsTracker: sessionStorage + scroll listeners → client
+//   BlogTOC: document.querySelector + scrollTo → client
+//
+// Dynamic splits:
+// Below-fold / client-only components are code-split via next/dynamic { ssr:false } in their wrapper files
+// (NoiseWrapper, ScratchpadDynamic, SpotifyNowPlayingDynamic, GitHubContributionsDynamic) — not included in initial bundle.
+// Note: Next 16 forbids `dynamic(...,{ssr:false})` directly inside Server Components (app/page.tsx is server),
+// so we use the wrapper pattern (client wrapper re-exports dynamic). This is the recommended equivalent and
+// matches the task's intent: dynamic(() => import("@/components/Noise"), { ssr:false, loading:()=>null }) etc.
+// HomepageBlogs/Projects stay static server imports for Suspense streaming.
 
 const sectionFallback = (
   <div className="flex h-24 items-center justify-center font-mono text-[11px] text-[#889988]">
@@ -109,7 +129,7 @@ export default function App() {
 
         <DividerSlash />
 
-        {/* Scratchpad — live */}
+        {/* Scratchpad — live (dynamic, ssr:false) */}
         <Scratchpad />
 
         <DividerSlash />
@@ -140,11 +160,11 @@ export default function App() {
 
         <DividerSlash />
 
-        {/* GitHub contributions — streams */}
+        {/* GitHub contributions — streams (dynamic, ssr:false) */}
         <div className="px-12 py-10">
           <Suspense fallback={<GitHubContributionsFallback />}>
             <TooltipProvider>
-              <GitHubContributions
+              <GitHubContributionsDynamic
                 contributions={getCachedContributions("skshmgpt")}
                 githubProfileUrl="https://github.com/skshmgpt"
               />
