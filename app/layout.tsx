@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import TiksProvider from "@/components/TiksProvider";
 import DynamicFavicon from "@/components/DynamicFavicon";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -81,6 +82,7 @@ export default function RootLayout({
             {children}
         </TiksProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
