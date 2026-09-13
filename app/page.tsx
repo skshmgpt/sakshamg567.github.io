@@ -93,6 +93,15 @@ export default function App() {
             >
               em
             </a>
+            <a
+              data-nav
+              href="/resume"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-[11px] text-[#00FF41] hover:underline"
+            >
+              resume →
+            </a>
           </div>
 
           <SpotifyNowPlaying />

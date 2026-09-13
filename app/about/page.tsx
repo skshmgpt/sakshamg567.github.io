@@ -129,6 +129,15 @@ export default function About() {
           >
             mail
           </a>
+          <a
+            data-nav
+            href="/resume"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-[12px] text-[#00FF41] hover:underline"
+          >
+            resume ↗
+          </a>
         </div>
       </div>
 
