@@ -84,21 +84,21 @@ export default async function BlogPage({
     "@type": "BlogPosting",
     headline: title,
     description: description,
-    image: `https://skshmgpt.tech/${slug}.webp`,
+    image: `https://skshmgpt.com/${slug}.webp`,
     datePublished: date,
     author: {
       "@type": "Person",
       name: "Saksham Gupta",
-      url: "https://skshmgpt.tech",
+      url: "https://skshmgpt.com",
     },
     publisher: {
       "@type": "Person",
       name: "Saksham Gupta",
-      url: "https://skshmgpt.tech",
+      url: "https://skshmgpt.com",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://skshmgpt.tech/blog/${slug}`,
+      "@id": `https://skshmgpt.com/blog/${slug}`,
     },
   };
 
