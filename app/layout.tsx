@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://skshmgpt.tech"),
+  metadataBase: new URL("https://skshmgpt.com"),
   title: {
     default: "Saksham Gupta — Full Stack Developer & CS Undergrad",
     template: "%s | Saksham Gupta",
@@ -35,12 +35,12 @@ export const metadata: Metadata = {
     "Go",
     "C",
   ],
-  authors: [{ name: "Saksham Gupta", url: "https://skshmgpt.tech" }],
+  authors: [{ name: "Saksham Gupta", url: "https://skshmgpt.com" }],
   creator: "Saksham Gupta",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://skshmgpt.tech",
+    url: "https://skshmgpt.com",
     siteName: "Saksham Gupta",
     title: "Saksham Gupta — Full Stack Developer & CS Undergrad",
     description:
