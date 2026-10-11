@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import data from "@/public/data.json";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://skshmgpt.tech";
+  const baseUrl = "https://skshmgpt.com";
 
   // Static pages
   const staticPages = [
